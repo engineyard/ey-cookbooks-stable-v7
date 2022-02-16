@@ -1,0 +1,22 @@
+Layout/EndOfLine:
+  Enabled: false
+Layout/TrailingEmptyLines:
+  Enabled: false
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+Lint/AssignmentInCondition:
+  Enabled: false
+Style/WordArray:
+  EnforcedStyle: brackets
+
+
+### Manual Exclusions ###
+Layout/ElseAlignment:
+  Exclude:
+    - 'coookbooks/ey-base/attributes/snapshot_and_backup_intervals.rb'
+Layout/EndAlignment:
+  Exclude:
+    - 'coookbooks/ey-base/attributes/snapshot_and_backup_intervals.rb'
+Layout/IndentationWidth:
+  Exclude:
+    - 'coookbooks/ey-base/attributes/snapshot_and_backup_intervals.rb'
