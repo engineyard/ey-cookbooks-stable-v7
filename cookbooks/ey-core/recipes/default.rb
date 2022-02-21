@@ -1,5 +1,3 @@
-include_recipe "ey-prechef"
-
 execute "reload-systemd" do
   command "systemctl daemon-reload"
   action :nothing
@@ -13,4 +11,4 @@ end
 apt_update
 
 include_recipe "ey-core::swap"
-include_recipe "ey-core:sshd"
+include_recipe "ey-core::sshd"
