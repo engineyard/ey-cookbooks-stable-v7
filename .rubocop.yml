@@ -9,14 +9,16 @@ Lint/AssignmentInCondition:
 Style/WordArray:
   EnforcedStyle: brackets
 
+#########################
+### Manual Exclusions ### 
+#########################
 
-### Manual Exclusions ###
 Layout/ElseAlignment:
   Exclude:
-    - 'coookbooks/ey-base/attributes/snapshot_and_backup_intervals.rb'
+    - 'cookbooks/ey-base/attributes/snapshot_and_backup_intervals.rb'
 Layout/EndAlignment:
   Exclude:
-    - 'coookbooks/ey-base/attributes/snapshot_and_backup_intervals.rb'
+    - 'cookbooks/ey-base/attributes/snapshot_and_backup_intervals.rb'
 Layout/IndentationWidth:
   Exclude:
-    - 'coookbooks/ey-base/attributes/snapshot_and_backup_intervals.rb'
+    - 'cookbooks/ey-base/attributes/snapshot_and_backup_intervals.rb'
