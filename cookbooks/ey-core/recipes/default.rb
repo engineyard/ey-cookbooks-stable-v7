@@ -1,4 +1,4 @@
-include_recipe "prechef"
+include_recipe "ey-prechef"
 
 execute "reload-systemd" do
   command "systemctl daemon-reload"
