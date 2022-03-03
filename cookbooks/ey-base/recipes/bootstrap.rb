@@ -1,3 +1,5 @@
+include_recipe "ey-stonith"
+
 descriptive_hostname = [
   node["dna"]["engineyard"]["this"],
   node["dna"]["environment"]["name"],
