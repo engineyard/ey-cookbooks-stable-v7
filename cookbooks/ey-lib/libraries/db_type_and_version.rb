@@ -1,0 +1,15 @@
+module RDSHelpers
+  def db_host_is_rds?
+    node["dna"]["engineyard"]["environment"]["db_provider_name"] == "amazon_rds"
+  end
+end
+
+class Chef
+  class Recipe
+    include RDSHelpers
+  end
+
+  class Resource
+    include RDSHelpers
+  end
+end

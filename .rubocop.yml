@@ -8,6 +8,14 @@ Lint/AssignmentInCondition:
   Enabled: false
 Style/WordArray:
   EnforcedStyle: brackets
+Lint/ShadowingOuterLocalVariable:
+  Enabled: false
+Style/SingleLineBlockParams:
+  Enabled: false
+Style/MultilineTernaryOperator:
+  Enabled: false
+Style/RegexpLiteral:
+  Enabled: false
 
 #########################
 ### Manual Exclusions ### 
@@ -19,6 +27,33 @@ Layout/ElseAlignment:
 Layout/EndAlignment:
   Exclude:
     - 'cookbooks/ey-base/attributes/snapshot_and_backup_intervals.rb'
+    - 'cookbooks/ey-lib/libraries/get_pool_size.rb'
 Layout/IndentationWidth:
   Exclude:
     - 'cookbooks/ey-base/attributes/snapshot_and_backup_intervals.rb'
+Layout/CaseIndentation:
+  Exclude:
+    - 'cookbooks/ey-lib/libraries/get_pool_size.rb'
+Lint/UselessAssignment:
+  Exclude:
+    - 'cookbooks/ey-lib/libraries/app_server_configs.rb'
+    - 'cookbooks/ey-lib/libraries/get_pool_size.rb'
+Style/Next:
+  Exclude:
+    - 'cookbooks/ey-lib/libraries/env_vars.rb'
+Chef/Correctness/MetadataMissingName:
+  Exclude:
+    - 'cookbooks/ey-lib/libraries/metadata.rb'
+Chef/Correctness/MetadataMissingVersion:
+  Exclude:
+    - 'cookbooks/ey-lib/libraries/metadata.rb'
+Style/Semicolon:
+  Exclude:
+    - 'cookbooks/ey-lib/libraries/metadata.rb'
+Style/RedundantSelf:
+  Exclude:
+    - 'cookbooks/ey-lib/libraries/ey-engineyard.rb'
+    - 'cookbooks/ey-lib/libraries/get_pool_size.rb'
+Lint/NestedMethodDefinition:
+  Exclude:
+    - 'cookbooks/ey-lib/libraries/ey-engineyard.rb'
