@@ -8,10 +8,6 @@ execute "reload-monit" do
   action :nothing
 end
 
-execute "testing" do
-  command "echo '#{node.app_master[0]}' > /root/test"
-end
-
 apt_update
 
 include_recipe "ey-core::swap"
