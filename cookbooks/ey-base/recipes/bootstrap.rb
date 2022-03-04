@@ -1,5 +1,6 @@
 include_recipe "ey-stonith"
 include_recipe "ey-ec2" if ["solo", "app", "util", "app_master", "node"].include?(node["dna"]["instance_role"])
+include_recipe "ey-ephemeraldisk"
 
 descriptive_hostname = [
   node["dna"]["engineyard"]["this"],
