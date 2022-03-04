@@ -15,6 +15,8 @@ execute "write descriptive_hostname file" do
   command "echo '#{descriptive_hostname}' > /etc/descriptive_hostname"
 end
 
+include_recipe "ey-dynamic::user"
+
 directory "/data" do
   owner node["owner_name"]
   group node["owner_name"]
