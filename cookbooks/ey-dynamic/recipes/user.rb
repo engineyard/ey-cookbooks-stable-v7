@@ -3,13 +3,14 @@ ey_cloud_report "users" do
 end
 
 # Remove ubuntu user and group if they exist
-execute "remove ubuntu user" do
-  command "userdel ubuntu"
+user "remove ubuntu user" do
+  username "ubuntu"
+  action :remove
   only_if "getent passwd ubuntu"
 end
 
-execute "remove ubuntu group" do
-  command "groupdel ubuntu"
+group "remove ubuntu group" do
+  group_name "ubuntu"
   only_if "getent group ubuntu"
 end
 
