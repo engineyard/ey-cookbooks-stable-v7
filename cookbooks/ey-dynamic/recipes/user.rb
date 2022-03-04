@@ -15,8 +15,8 @@ end
 
 ## EY role account should come first in the node.dna[:users] array
 node["dna"]["users"].each do |user_obj|
-  group user_obj['username'] do
-    gid user_obj['gid']
+  group user_obj["username"] do
+    gid user_obj["gid"]
     not_if "getent group #{user_obj['gid']}"
   end
 
@@ -45,8 +45,8 @@ node["dna"]["users"].each do |user_obj|
   end
 
   execute "update-username" do
-    command "usermod -l #{user_obj['username']} --home /home/#{user_obj['username']} --move-home `getent passwd #{user_obj['uid']} | cut -d \":\" -f 1` && groupmod --new-name #{user_obj['username']} `getent group #{user_obj['uid']} | cut -d \":\" -f 1`"
-    only_if { user_obj['username'] != `getent passwd #{user_obj['uid']} | cut -d \":\" -f 1` }
+    command "usermod -l #{user_obj['username']} --home /home/#{user_obj['username']} --move-home `getent passwd #{user_obj['uid']} | cut -d ':' -f 1` && groupmod --new-name #{user_obj['username']} `getent group #{user_obj['uid']} | cut -d ':' -f 1`"
+    only_if { user_obj["username"] != `getent passwd #{user_obj["uid"]} | cut -d ':' -f 1` }
   end
 
   execute "add base dotfiles" do
