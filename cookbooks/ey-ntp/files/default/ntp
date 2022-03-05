@@ -1,0 +1,1 @@
+NTPD_OPTS="-l /var/log/ntp.log"
