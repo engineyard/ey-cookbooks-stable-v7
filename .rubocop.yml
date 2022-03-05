@@ -57,3 +57,6 @@ Style/RedundantSelf:
 Lint/NestedMethodDefinition:
   Exclude:
     - 'cookbooks/ey-lib/libraries/ey-engineyard.rb'
+Lint/ParenthesesAsGroupedExpression:
+  Exclude:
+    - 'cookbooks/ey-cron/recipes/default.rb'
