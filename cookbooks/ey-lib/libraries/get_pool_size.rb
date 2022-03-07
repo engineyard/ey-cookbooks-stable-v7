@@ -109,12 +109,15 @@ class Engineyard
       end
 
       Resources.merge!({
+        # General burstable 3rd Gen
         "t3.micro"     => InstanceResource.new(2, 4, nil),
         "t3.small"     => InstanceResource.new(2, 8, nil),
         "t3.medium"    => InstanceResource.new(2, 8, nil),
         "t3.large"     => InstanceResource.new(2, 8, nil),
         "t3.xlarge"    => InstanceResource.new(4, 16, nil),
         "t3.2xlarge"   => InstanceResource.new(4, 31, nil),
+
+        # General purpose 5th Gen
         "m5.large"     => InstanceResource.new(2, 8, nil),
         "m5.xlarge"    => InstanceResource.new(4, 16, nil),
         "m5.2xlarge"   => InstanceResource.new(8, 31, nil),
@@ -133,6 +136,34 @@ class Engineyard
         "m5d.4xlarge"  => InstanceResource.new(16, 60, nil),
         "m5d.12xlarge" => InstanceResource.new(48, 173, nil),
         "m5d.24xlarge" => InstanceResource.new(96, 345, nil),
+
+        # General purpose 6th Gen
+        "m6a.large"    => InstanceResource.new(2, 8, nil),
+        "m6a.xlarge"   => InstanceResource.new(4, 16, nil),
+        "m6a.2xlarge"  => InstanceResource.new(8, 31, nil),
+        "m6a.4xlarge"  => InstanceResource.new(16, 60, nil),
+        "m6a.12xlarge" => InstanceResource.new(48, 173, nil),
+        "m6a.24xlarge" => InstanceResource.new(96, 346, nil),
+        "m6i.large"    => InstanceResource.new(2, 8, nil),
+        "m6i.xlarge"   => InstanceResource.new(4, 16, nil),
+        "m6i.2xlarge"  => InstanceResource.new(8, 31, nil),
+        "m6i.4xlarge"  => InstanceResource.new(16, 60, nil),
+        "m6i.12xlarge" => InstanceResource.new(48, 173, nil),
+        "m6i.24xlarge" => InstanceResource.new(96, 345, nil),
+        "m6g.large"    => InstanceResource.new(2, 8, nil),
+        "m6g.xlarge"   => InstanceResource.new(4, 16, nil),
+        "m6g.2xlarge"  => InstanceResource.new(8, 31, nil),
+        "m6g.4xlarge"  => InstanceResource.new(16, 60, nil),
+        "m6g.12xlarge" => InstanceResource.new(48, 173, nil),
+        "m6g.16xlarge" => InstanceResource.new(64, 208, nil),
+        "m6gd.large"   => InstanceResource.new(2, 8, nil),
+        "m6gd.xlarge"  => InstanceResource.new(4, 16, nil),
+        "m6gd.2xlarge" => InstanceResource.new(8, 31, nil),
+        "m6gd.4xlarge" => InstanceResource.new(16, 60, nil),
+        "m6gd.12xlarge"=> InstanceResource.new(48, 173, nil),
+        "m6gd.16xlarge"=> InstanceResource.new(64, 208, nil),
+
+        # Compute optimized 5th Gen
         "c5.large"     => InstanceResource.new(2, 9, nil),
         "c5.xlarge"    => InstanceResource.new(4, 17, nil),
         "c5.2xlarge"   => InstanceResource.new(8, 34, nil),
@@ -145,6 +176,34 @@ class Engineyard
         "c5d.4xlarge"  => InstanceResource.new(16, 68, nil),
         "c5d.9xlarge"  => InstanceResource.new(36, 141, nil),
         "c5d.18xlarge" => InstanceResource.new(72, 281, nil),
+
+        # Compute optimized 6th Gen
+        "c6i.large"    => InstanceResource.new(2, 9, nil),
+        "c6i.xlarge"   => InstanceResource.new(4, 17, nil),
+        "c6i.2xlarge"  => InstanceResource.new(8, 34, nil),
+        "c6i.4xlarge"  => InstanceResource.new(16, 68, nil),
+        "c6i.8xlarge"  => InstanceResource.new(32, 104, nil),
+        "c6i.16xlarge" => InstanceResource.new(64, 208, nil),
+        "c6a.large"    => InstanceResource.new(2, 9, nil),
+        "c6a.xlarge"   => InstanceResource.new(4, 17, nil),
+        "c6a.2xlarge"  => InstanceResource.new(8, 34, nil),
+        "c6a.4xlarge"  => InstanceResource.new(16, 68, nil),
+        "c6a.8xlarge"  => InstanceResource.new(32, 104, nil),
+        "c6a.16xlarge" => InstanceResource.new(64, 208, nil),
+        "c6g.large"    => InstanceResource.new(2, 9, nil),
+        "c6g.xlarge"   => InstanceResource.new(4, 17, nil),
+        "c6g.2xlarge"  => InstanceResource.new(8, 34, nil),
+        "c6g.4xlarge"  => InstanceResource.new(16, 68, nil),
+        "c6g.8xlarge"  => InstanceResource.new(32, 104, nil),
+        "c6g.16xlarge" => InstanceResource.new(64, 208, nil),
+        "c6gd.large"   => InstanceResource.new(2, 9, nil),
+        "c6gd.xlarge"  => InstanceResource.new(4, 17, nil),
+        "c6gd.2xlarge" => InstanceResource.new(8, 34, nil),
+        "c6gd.4xlarge" => InstanceResource.new(16, 68, nil),
+        "c6gd.8xlarge" => InstanceResource.new(32, 104, nil),
+        "c6gd.16xlarge"=> InstanceResource.new(64, 208, nil),
+
+        # Memory optimized 5th Gen
         "r5.large"     => InstanceResource.new(2, 10, nil),
         "r5.xlarge"    => InstanceResource.new(4, 19, nil),
         "r5.2xlarge"   => InstanceResource.new(8, 38, nil),
@@ -163,12 +222,42 @@ class Engineyard
         "r5d.4xlarge"  => InstanceResource.new(16, 71, nil),
         "r5d.12xlarge" => InstanceResource.new(48, 173, nil),
         "r5d.24xlarge" => InstanceResource.new(96, 347, nil),
+
+        # Memory optimized 6th Gen
+        "r6i.large"    => InstanceResource.new(2, 10, nil),
+        "r6i.xlarge"   => InstanceResource.new(4, 19, nil),
+        "r6i.2xlarge"  => InstanceResource.new(8, 38, nil),
+        "r6i.4xlarge"  => InstanceResource.new(16, 71, nil),
+        "r6i.12xlarge" => InstanceResource.new(48, 173, nil),
+        "r6i.24xlarge" => InstanceResource.new(96, 347, nil),
+        "r6g.large"    => InstanceResource.new(2, 10, nil),
+        "r6g.xlarge"   => InstanceResource.new(4, 19, nil),
+        "r6g.2xlarge"  => InstanceResource.new(8, 38, nil),
+        "r6g.4xlarge"  => InstanceResource.new(16, 71, nil),
+        "r6g.12xlarge" => InstanceResource.new(48, 173, nil),
+        "r6g.16xlarge" => InstanceResource.new(64, 208, nil),
+        "r6gd.large"   => InstanceResource.new(2, 10, nil),
+        "r6gd.xlarge"  => InstanceResource.new(4, 19, nil),
+        "r6gd.2xlarge" => InstanceResource.new(8, 38, nil),
+        "r6gd.4xlarge" => InstanceResource.new(16, 71, nil),
+        "r6gd.12xlarge"=> InstanceResource.new(48, 173, nil),
+        "r6gd.16xlarge"=> InstanceResource.new(64, 208, nil),
+
+        # Storage optimized 3rd Gen
         "i3.large"     => InstanceResource.new(2, 7, nil),
         "i3.xlarge"    => InstanceResource.new(4, 13, nil),
         "i3.2xlarge"   => InstanceResource.new(8, 27, nil),
         "i3.4xlarge"   => InstanceResource.new(16, 53, nil),
         "i3.8xlarge"   => InstanceResource.new(32, 99, nil),
         "i3.16xlarge"  => InstanceResource.new(64, 200, nil),
+
+        # Storage optimized 4rd Gen
+        "i4i.large"    => InstanceResource.new(2, 7, nil),
+        "i4i.xlarge"   => InstanceResource.new(4, 13, nil),
+        "i4i.2xlarge"  => InstanceResource.new(8, 27, nil),
+        "i4i.4xlarge"  => InstanceResource.new(16, 53, nil),
+        "i4i.8xlarge"  => InstanceResource.new(32, 99, nil),
+        "i4i.16xlarge" => InstanceResource.new(64, 200, nil),
       })
 
       # attributes
