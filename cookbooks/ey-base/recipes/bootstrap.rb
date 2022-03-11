@@ -92,3 +92,5 @@ cookbook_file "/root/.profile" do
   group "root"
   source "profile"
 end
+
+include_recipe "ey-cron"
