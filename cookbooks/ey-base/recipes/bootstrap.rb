@@ -94,3 +94,4 @@ cookbook_file "/root/.profile" do
 end
 
 include_recipe "ey-cron"
+include_recipe "ey-env"
