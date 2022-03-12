@@ -58,4 +58,10 @@ node["dna"]["users"].each do |user_obj|
   execute "chown homedir to user" do
     command "chown -R #{user_obj['username']}:#{user_obj['username']} /data/homedirs/#{user_obj['username']}"
   end
+
+  sudo "ey-managed-dymaic-sudoers" do
+    users user_obj["username"]
+    group user_obj["username"]
+    nopasswd true
+  end
 end
