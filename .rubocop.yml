@@ -16,6 +16,8 @@ Style/MultilineTernaryOperator:
   Enabled: false
 Style/RegexpLiteral:
   Enabled: false
+Chef/Correctness/TmpPath:
+  Enabled: false
 
 #########################
 ### Manual Exclusions ### 
