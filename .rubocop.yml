@@ -16,7 +16,8 @@ Style/MultilineTernaryOperator:
   Enabled: false
 Style/RegexpLiteral:
   Enabled: false
-
+Style/Next: 
+  Enabled: false
 #########################
 ### Manual Exclusions ### 
 #########################
@@ -38,9 +39,6 @@ Lint/UselessAssignment:
   Exclude:
     - 'cookbooks/ey-lib/libraries/app_server_configs.rb'
     - 'cookbooks/ey-lib/libraries/get_pool_size.rb'
-Style/Next:
-  Exclude:
-    - 'cookbooks/ey-lib/libraries/env_vars.rb'
 Chef/Correctness/MetadataMissingName:
   Exclude:
     - 'cookbooks/ey-lib/libraries/metadata.rb'
