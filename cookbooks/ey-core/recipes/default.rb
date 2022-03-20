@@ -1,3 +1,5 @@
+include_recipe "ey-prechef"
+
 execute "reload-systemd" do
   command "systemctl daemon-reload"
   action :nothing
