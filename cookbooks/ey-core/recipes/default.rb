@@ -16,3 +16,4 @@ include_recipe "ey-core::swap"
 include_recipe "ey-ntp"
 
 include_recipe "ey-core::sshd"
+include_recipe "ey-unattended-upgrades"
