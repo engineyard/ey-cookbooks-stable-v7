@@ -15,4 +15,5 @@ include_recipe "ey-core::swap"
 
 include_recipe "ey-ntp"
 
+package "run-one"
 include_recipe "ey-core::sshd"
