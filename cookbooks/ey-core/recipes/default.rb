@@ -15,4 +15,5 @@ include_recipe "ey-core::swap"
 
 include_recipe "ey-ntp"
 
+include_recipe "ey-hosts"
 include_recipe "ey-core::sshd"
