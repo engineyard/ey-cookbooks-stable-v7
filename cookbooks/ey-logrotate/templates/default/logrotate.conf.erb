@@ -1,0 +1,17 @@
+<%= Array(@files).join("\n") %> {
+    <%= @frequency %>
+    rotate <%= @rotate_count %>
+    <% if @date_ext %>dateext<% end %>
+    <% if @compress %>compress<% end %>
+    <% if @delay_compress %>delaycompress<% end %>
+    <% if @missing_ok %>missingok<% end %>
+    <% if !@rotate_if_empty %>notifempty<% end %>
+    sharedscripts
+    <% if @extension %>extension <%= @extension %><% end %>
+    <% if @copy_then_truncate %>copytruncate<% end %>
+    <% if @restart_command %>
+      postrotate
+          <%= @restart_command %>
+      endscript
+    <% end %>
+}
