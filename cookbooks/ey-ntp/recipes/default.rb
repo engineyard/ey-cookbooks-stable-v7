@@ -63,3 +63,10 @@ template "/engineyard/bin/ey-ntp-check" do
   mode "0555"
   source "ey-ntp-check.erb"
 end
+
+cron "ntp_check" do
+  minute    "2"
+  hour      "*/6"
+  command   "/engineyard/bin/ey-ntp-check"
+  action :create
+end
