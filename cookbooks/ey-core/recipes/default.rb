@@ -12,8 +12,11 @@ apt_update
 
 include_recipe "ey-sysctl::tune"
 include_recipe "ey-core::swap"
-
-include_recipe "ey-ntp"
+# include_recipe "ey-openssl"
 include_recipe "ey-instance-api"
-
+include_recipe "ey-syslog-ng"
+include_recipe "ey-timezones"
+include_recipe "ey-logrotate"
+include_recipe "ey-hosts"
 include_recipe "ey-core::sshd"
+include_recipe "unattended-upgrades"
