@@ -10,7 +10,7 @@ end
 
 apt_update
 
-package "run-one" # Makes the run-one binary accessible across system, similar to lockrun in previous stacks
+package "run-one" # Makes the run-one binary accessible across system, similar to lockrun in previous stack
 
 include_recipe "ey-sysctl::tune"
 include_recipe "ey-core::swap"
