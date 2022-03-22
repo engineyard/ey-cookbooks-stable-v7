@@ -106,6 +106,13 @@ class Chef
         end
       end
 
+      def ruby_package_details(ruby_version)
+        {
+          full_version: ruby_version,
+          version: ruby_version.split("-", 2).last,
+        }
+      end
+
       def default_ruby_version(ruby_archtype)
         # According to https://support.cloud.engineyard.com/hc/en-us/articles/360022162773-Engine-Yard-Ubuntu-19-05-Technology-Stack
         versions = {

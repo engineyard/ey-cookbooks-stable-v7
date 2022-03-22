@@ -16,8 +16,11 @@ Style/MultilineTernaryOperator:
   Enabled: false
 Style/RegexpLiteral:
   Enabled: false
-Style/Next: 
+Chef/Correctness/TmpPath:
   Enabled: false
+Style/Next:
+  Enabled: false
+
 #########################
 ### Manual Exclusions ### 
 #########################
@@ -58,3 +61,6 @@ Lint/NestedMethodDefinition:
 Lint/ParenthesesAsGroupedExpression:
   Exclude:
     - 'cookbooks/ey-cron/recipes/default.rb'
+Style/ConditionalAssignment:
+  Exclude:
+    - 'cookbooks/ey-hosts/recipes/default.rb'
