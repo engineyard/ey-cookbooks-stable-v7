@@ -1,3 +1,5 @@
+include_recipe "ey-prechef"
+
 execute "reload-systemd" do
   command "systemctl daemon-reload"
   action :nothing
@@ -9,6 +11,8 @@ execute "reload-monit" do
 end
 
 apt_update
+
+package "run-one" # Makes the run-one binary accessible across system, similar to lockrun in previous stack
 
 include_recipe "ey-sysctl::tune"
 include_recipe "ey-core::swap"
