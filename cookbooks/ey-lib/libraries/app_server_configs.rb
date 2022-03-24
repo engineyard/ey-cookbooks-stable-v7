@@ -13,16 +13,16 @@ module AppServerConfigs
 
     def app_server_get_worker_memory_size(app)
       # See https://support.cloud.engineyard.com/entries/23852283-Worker-Allocation-on-Engine-Yard-Cloud for more details
-      mem_size = fetch_env_var_for_app(app, "EY_WORKER_MEMORY_SIZE") || metadata_app_get_with_default(app.name, :worker_memory_size) || "255.0"
+      mem_size = fetch_env_var_for_app(app, "EY_WORKER_MEMORY_SIZE") || metadata_app_get_with_default(app.name, :worker_memory_size, "255.0")
     end
 
     def app_server_get_passenger_grace_time(app)
-      grace_time = fetch_env_var_for_app(app, "EY_PASSENGER_GRACE_TIME") || metadata_app_get_with_default(app.name, :passenger_grace_time) || "60"
+      grace_time = fetch_env_var_for_app(app, "EY_PASSENGER_GRACE_TIME") || metadata_app_get_with_default(app.name, :passenger_grace_time, "60")
     end
 
     def app_server_get_worker_termination_conditions(app)
       # 1. Default conditions
-      conditions = fetch_env_var_for_app(app, "EY_WORKER_TERMINATION_CONDITIONS") || metadata_app_get_with_default(app.name, :worker_termination_conditions) || '{"quit": [], "term": [{"cycles": 8}]}'
+      conditions = fetch_env_var_for_app(app, "EY_WORKER_TERMINATION_CONDITIONS") || metadata_app_get_with_default(app.name, :worker_termination_conditions, '{"quit": [], "term": [{"cycles": 8}]}')
       conditions = JSON.parse conditions
       base_cycles = (conditions.fetch("quit", []).detect { |h| h.key?("cycles") } || {}).fetch("cycles", 2).to_i
       worker_memory_size = app_server_get_worker_memory_size(app)

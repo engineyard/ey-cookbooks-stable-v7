@@ -67,7 +67,10 @@ end
     next if recipe == "memcached"
     # skipping node::tcp recipe run. This acts as a workaround for nodejs apps till EYPP-11098 is fixed
     next if recipe == "node::tcp"
-    # include_recipe ey-#{recipe}
+    # This is a temp fix for puma install, so no other non ported recipes are installed
+    next if recipe != "puma"
+
+    include_recipe "ey-#{recipe}"
   end
 end
 
