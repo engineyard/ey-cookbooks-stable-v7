@@ -67,10 +67,9 @@ end
     next if recipe == "memcached"
     # skipping node::tcp recipe run. This acts as a workaround for nodejs apps till EYPP-11098 is fixed
     next if recipe == "node::tcp"
-    # include_recipe recipe
+    # include_recipe ey-#{recipe}
   end
 end
 
-# include_recipe "env_vars::init"
-# include_recipe "env_vars::cloud"
+include_recipe "ey-env_vars::cloud"
 # include_recipe "cdn_distribution::default"
