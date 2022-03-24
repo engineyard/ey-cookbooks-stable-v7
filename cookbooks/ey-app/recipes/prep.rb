@@ -15,7 +15,7 @@ unless is_solo # for solo leave the db stuff to the db cookbook
 end
 
 include_recipe "ey-app::remove"
-# include_recipe "ey-app-logs"
+include_recipe "ey-app-logs"
 include_recipe "ey-app::create"
 # include_recipe "ey-db-libs"
 # include_recipe "haproxy"
