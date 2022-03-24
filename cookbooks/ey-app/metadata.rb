@@ -2,7 +2,7 @@ name "ey-app"
 version "1.0.0"
 
 depends "ey-deploy-keys"
-# depends "app-logs"
+depends "ey-app-logs"
 # depends "unicorn"
 # depends "passenger5"
 # depends "puma"
