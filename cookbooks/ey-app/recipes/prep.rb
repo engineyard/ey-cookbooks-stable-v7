@@ -1,4 +1,4 @@
-# include_recipe "deploy-keys"
+include_recipe "ey-deploy-keys"
 
 # TODO: Remove this chunk to the db_master recipe
 is_solo = ["solo"].include?(node["dna"]["instance_role"])
