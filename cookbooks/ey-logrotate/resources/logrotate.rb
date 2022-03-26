@@ -10,6 +10,7 @@ property :enable, [true, false], default: true
 property :date_ext, [true, false], default: true
 property :extension, String, default: "gz"
 property :files, String
+property :restart_command, String
 property :copy_then_truncate, [true, false], default: false
 property :delay_compress, [true, false], default: false
 
@@ -30,6 +31,7 @@ action :logrotate_action do
       extension: new_resource.extension,
       files: new_resource.files,
       copy_then_truncate: new_resource.copy_then_truncate,
+      restart_command: new_resource.restart_command,
       delay_compress: new_resource.delay_compress
     )
     backup false
