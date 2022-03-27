@@ -42,5 +42,9 @@ class Chef
     def db_slaves
       instances.select { |i| ["db_slave"].include?(i["role"]) }.map { |i| private_ip_for(i) }.compact
     end
+
+    def stack
+      node.engineyard.environment["stack_name"]
+    end
   end
 end
