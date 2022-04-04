@@ -1,3 +1,5 @@
+include_recipe "ey-monit"
+
 file "/etc/engineyard/recipe-revision.txt" do
   action :touch
   mode "0644"
