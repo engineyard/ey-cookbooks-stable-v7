@@ -1,10 +1,10 @@
 default["sidekiq"].tap do |sidekiq|
-  is_sidekiq_enabled = !!(fetch_env_var(node, "EY_SIDEKIQ6_ENABLED", "false") =~ /^TRUE$/i)
+  is_sidekiq_enabled = !!(fetch_env_var(node, "EY_SIDEKIQ_ENABLED", "false") =~ /^TRUE$/i)
   # Sidekiq will be installed on to application/solo instances,
   # unless a utility name is set, in which case, Sidekiq will
   # only be installed on to a utility instance that matches
   # the name
-  role_pattern = fetch_env_var(node, "EY_SIDEKIQ6_INSTANCES_ROLE")
+  role_pattern = fetch_env_var(node, "EY_SIDEKIQ_INSTANCES_ROLE")
   instance_filter_active = false
   does_role_match = true
   if role_pattern
@@ -50,7 +50,7 @@ default["sidekiq"].tap do |sidekiq|
   end
 
   # Memory limit
-  sidekiq["worker_memory"] = fetch_env_var(node, "EY_SIDEKIQ6_WORKER_MEMORY_MB", 400).to_i # MB
+  sidekiq["worker_memory"] = fetch_env_var(node, "EY_SIDEKIQ_WORKER_MEMORY_MB", 400).to_i # MB
 
   # Verbose
   sidekiq["verbose"] = fetch_env_var(node, "EY_SIDEKIQ_VERBOSE", false).to_s == "true"

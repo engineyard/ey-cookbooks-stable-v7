@@ -1,7 +1,7 @@
 if node["sidekiq"]["is_sidekiq_instance"]
   # report to dashboard
-  ey_cloud_report "sidekiq6" do
-    message "Setting up sidekiq 6 or later"
+  ey_cloud_report "sidekiq" do
+    message "Setting up sidekiq recipe"
   end
 
   # loop through applications
