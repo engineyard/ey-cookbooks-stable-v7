@@ -98,6 +98,31 @@ node.engineyard.apps.each_with_index do |app, _index|
     not_if { ::File.exist?("/etc/nginx/servers/#{app.name}/additional_server_blocks.customer") }
   end
 
+  template "/data/nginx/ssl/#{app.name}/#{app.name}.key" do
+    owner node["owner_name"]
+    group node["owner_name"]
+    mode "0644"
+    source "sslkey.erb"
+    backup 0
+    variables(
+      key: app[:vhosts][1]["key"]
+    )
+    notifies node["nginx"]["action"], "service[nginx]", :delayed
+  end
+
+  template "/data/nginx/ssl/#{app.name}/#{app.name}.crt" do
+    owner node["owner_name"]
+    group node["owner_name"]
+    mode "0644"
+    source "sslcrt.erb"
+    backup 0
+    variables(
+      crt: app["vhosts"][1]["crt"],
+      chain: app["vhosts"][1]["chain"]
+    )
+    notifies node["nginx"]["action"], "service[nginx]", :delayed
+  end
+
   managed_template "/etc/nginx/servers/#{app.name}/additional_location_blocks.customer" do
     owner node["owner_name"]
     group node["owner_name"]
@@ -117,6 +142,45 @@ node.engineyard.apps.each_with_index do |app, _index|
     owner node.engineyard.environment.ssh_username
     group node.engineyard.environment.ssh_username
     mode "0644"
+  end
+
+  template "/data/nginx/servers/#{app.name}/default.ssl_cipher" do
+    owner node["owner_name"]
+    group node["owner_name"]
+    mode "0644"
+    source "default_ssl_cipher.erb"
+    backup 3
+    variables(
+      app_name: app.name,
+      dhparam_available: app.metadata("dh_key", nil)
+    )
+    notifies node["nginx"]["action"], "service[nginx]", :delayed
+  end
+
+  # Chain files are create if missing and do not reload Nginx
+
+  # Add Cipher chain
+  template "/data/nginx/servers/#{app.name}/customer.ssl_cipher" do
+    owner node["owner_name"]
+    group node["owner_name"]
+    mode "0644"
+    source "customer_ssl_cipher.erb"
+    action :create_if_missing
+    variables(
+      app_name: app.name
+    )
+  end
+
+  # Add Cipher chain
+  template "/data/nginx/servers/#{app.name}/ssl_cipher" do
+    owner node["owner_name"]
+    group node["owner_name"]
+    mode "0644"
+    source "main_ssl_cipher.erb"
+    action :create_if_missing
+    variables(
+      app_name: app.name
+    )
   end
 
   managed_template "/data/nginx/ssl/#{app.name}/dhparam.#{app.name}.pem" do
