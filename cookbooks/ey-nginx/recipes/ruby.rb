@@ -19,7 +19,6 @@ node.engineyard.apps.each_with_index do |app, index|
 
   files = app.https? ? ["/data/nginx/servers/#{app.name}.conf", "/data/nginx/servers/#{app.name}.ssl.conf"] : ["/data/nginx/servers/#{app.name}.conf"]
   files.each_with_index do |file, count|
-    Chef::Log.info "file is #{file}"
     template "#{file}" do
       owner node["owner_name"]
       group node["owner_name"]
