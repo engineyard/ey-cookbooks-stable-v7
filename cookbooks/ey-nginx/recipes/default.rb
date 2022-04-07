@@ -85,6 +85,11 @@ node.engineyard.apps.each_with_index do |app, _index|
     group node["owner_name"]
     mode "0775"
   end
+directory "/data/nginx/ssl/#{app.name}" do
+  owner node["owner_name"]
+  group node["owner_name"]
+  mode "0775"
+end
 
   managed_template "/etc/nginx/servers/#{app.name}/additional_server_blocks.customer" do
     owner node["owner_name"]
