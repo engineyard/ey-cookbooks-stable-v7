@@ -11,11 +11,15 @@ if node.stack.match(/puma/)
 end
 
 node.engineyard.apps.each_with_index do |app, index|
-  app_base_port = base_port + (stepping * index) if node.stack.match(/puma/)
+  if node.stack.match(/puma/)
+    app_base_port = base_port + (stepping * index)
+    workers = [(1.0 * get_pool_size() / node["dna"]["applications"].size).round, 1].max
+    ports = (app_base_port...(app_base_port + workers)).to_a
+  end
 
   files = app.https? ? ["/data/nginx/servers/#{app.name}.conf", "/data/nginx/servers/#{app.name}.ssl.conf"] : ["/data/nginx/servers/#{app.name}.conf"]
-
   files.each_with_index do |file, count|
+    Chef::Log.info "file is #{file}"
     template "#{file}" do
       owner node["owner_name"]
       group node["owner_name"]
@@ -27,7 +31,7 @@ node.engineyard.apps.each_with_index do |app, index|
         haproxy_nginx_port: !(count == 0) ? node["nginx"]["nginx_haproxy_https_port"] : node["nginx"]["nginx_haproxy_http_port"],
         xlb_nginx_port: !(count == 0) ? node["nginx"]["nginx_xlb_https_port"] : node["nginx"]["nginx_xlb_http_port"],
         app_instance: is_app_master,
-        upstream_port: app_base_port,
+        upstream_port: ports,
         http2: node["nginx"]["http2"],
         ssl: !(count == 0)
       )
