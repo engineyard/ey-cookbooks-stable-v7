@@ -1,5 +1,5 @@
 if fetch_env_var(node, "EY_REDIS_ENABLED") =~ /^TRUE$/i
-  include_recipe "redis"
+  include_recipe "ey-redis"
 end
 
 if fetch_env_var(node, "EY_MEMCACHED_ENABLED") =~ /^TRUE$/i
