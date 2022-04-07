@@ -16,4 +16,7 @@ depends "ey-efs"
 depends "ey-monit"
 depends "ey-redis"
 depends "ey-sidekiq"
+<<<<<<< HEAD
 
+=======
+>>>>>>> d8e5caf0db84980fa4aa605bd4a0b7d022e7f842
