@@ -11,3 +11,4 @@ default["sysctl"]["rmem_max"] = 33554432
 default["sysctl"]["wmem_max"] = 33554432
 default["sysctl"]["tcp_mem"] = "8388608 8388608 8388608"
 default["sysctl"]["file_max"] = 1048576
+default["sysctl"]["max_user_instances"] = 8192
