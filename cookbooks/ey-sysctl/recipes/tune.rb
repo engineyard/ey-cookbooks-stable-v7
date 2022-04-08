@@ -9,6 +9,10 @@ sysctl "fs.file-max" do
   value node["sysctl"]["file_max"]
 end
 
+sysctl "fs.inotify.max_user_instances" do
+  value node["sysctl"]["max_user_instances"]
+end
+
 sysctl "net.core.somaxconn" do
   value node["sysctl"]["somaxconn"]
 end
