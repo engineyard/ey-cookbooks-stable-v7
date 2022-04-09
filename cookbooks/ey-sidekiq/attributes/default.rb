@@ -12,7 +12,7 @@ default["sidekiq"].tap do |sidekiq|
     role_pattern = Regexp.new(role_pattern)
     does_role_match = !role_pattern.match(node["dna"]["instance_role"]).nil?
   end
-  name_pattern = fetch_env_var(node, "EY_SIDEKIQ_INSTANCES_NAME")
+  name_pattern = fetch_env_var(node, "EY_SIDEKIQ_INSTANCES_NAME", "sidekiq")
   does_name_match = true
   if name_pattern
     instance_filter_active = true
