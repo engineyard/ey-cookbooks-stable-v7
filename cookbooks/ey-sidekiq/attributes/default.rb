@@ -1,16 +1,16 @@
 default["sidekiq"].tap do |sidekiq|
-  is_sidekiq_enabled = (fetch_env_var(node, "EY_SIDEKIQ_ENABLED", "false") =~ /^TRUE$/i)
-  # Sidekiq will be installed on to application/solo instances,
-  # unless a utility name is set, in which case, Sidekiq will
-  # only be installed on to a utility instance that matches
-  # the name
-  #role_pattern = fetch_env_var(node, "EY_SIDEKIQ_INSTANCES_ROLE", "util")
+
+  is_sidekiq_enabled = !!(fetch_env_var(node, "EY_SIDEKIQ_ENABLED", "false") =~ /^TRUE$/i)
+
+  # By default we install sidekiq on all utility instances
+  # If there are no utility instances available sidekiq is not installed
+  # We use regex so it could be installed on all app instances using app for example
+
   does_role_match = Regexp.new(fetch_env_var(node, "EY_SIDEKIQ_INSTANCES_ROLE", "util")).match(node["dna"]["instance_role"]) ? true : false
+  does_name_match = Regexp.new(fetch_env_var(node, "EY_SIDEKIQ_INSTANCES_NAME", "")).match(node["dna"]["name"]) ? true : false
+  not_database = !(node["dna"]["instance_role"] =~ /^db_/)
 
-  #name_pattern = fetch_env_var(node, "EY_SIDEKIQ_INSTANCES_NAME", "sidekiq")
-  does_name_match = Regexp.new(fetch_env_var(node, "EY_SIDEKIQ_INSTANCES_NAME", "sidekiq")).match(node["dna"]["name"]) ? true : false
-
-  sidekiq["is_sidekiq_instance"] = (is_sidekiq_enabled && does_role_match && does_name_match && !node["dna"]["instance_role"] =~ /^db_/)
+  sidekiq["is_sidekiq_instance"] = (is_sidekiq_enabled && does_role_match && does_name_match && not_database)
 
   # We create an on-instance `after_restart` hook only
   # when the recipe was enabled via environment variables.
