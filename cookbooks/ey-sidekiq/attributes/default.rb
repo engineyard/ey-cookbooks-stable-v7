@@ -1,30 +1,16 @@
 default["sidekiq"].tap do |sidekiq|
+
   is_sidekiq_enabled = !!(fetch_env_var(node, "EY_SIDEKIQ_ENABLED", "false") =~ /^TRUE$/i)
-  # Sidekiq will be installed on to application/solo instances,
-  # unless a utility name is set, in which case, Sidekiq will
-  # only be installed on to a utility instance that matches
-  # the name
-  role_pattern = fetch_env_var(node, "EY_SIDEKIQ_INSTANCES_ROLE")
-  instance_filter_active = false
-  does_role_match = true
-  if role_pattern
-    instance_filter_active = true
-    role_pattern = Regexp.new(role_pattern)
-    does_role_match = !role_pattern.match(node["dna"]["instance_role"]).nil?
-  end
-  name_pattern = fetch_env_var(node, "EY_SIDEKIQ_INSTANCES_NAME", "sidekiq")
-  does_name_match = true
-  if name_pattern
-    instance_filter_active = true
-    name_pattern = Regexp.new(name_pattern)
-    does_name_match = !name_pattern.match(node["dna"]["name"]).nil?
-  end
-  # Sidekiq workers can't be run on DB instances (no code gets deployed there).
-  # Therefore we explicitly filter out DB instances
-  is_db_instance = !!(node["dna"]["instance_role"] =~ /^db_/)
-  # If an instance pattern is active, deactivate DB filter
-  db_instance_gate = (instance_filter_active || !is_db_instance)
-  sidekiq["is_sidekiq_instance"] = (is_sidekiq_enabled && does_role_match && does_name_match && db_instance_gate)
+
+  # By default we install sidekiq on all utility instances
+  # If there are no utility instances available sidekiq is not installed
+  # We use regex so it could be installed on all app instances using app for example
+
+  does_role_match = Regexp.new(fetch_env_var(node, "EY_SIDEKIQ_INSTANCES_ROLE", "util")).match(node["dna"]["instance_role"]) ? true : false
+  does_name_match = Regexp.new(fetch_env_var(node, "EY_SIDEKIQ_INSTANCES_NAME", "")).match(node["dna"]["name"]) ? true : false
+  not_database = !(node["dna"]["instance_role"] =~ /^db_/)
+
+  sidekiq["is_sidekiq_instance"] = (is_sidekiq_enabled && does_role_match && does_name_match && not_database)
 
   # We create an on-instance `after_restart` hook only
   # when the recipe was enabled via environment variables.
