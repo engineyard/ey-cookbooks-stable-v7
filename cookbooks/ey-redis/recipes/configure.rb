@@ -1,4 +1,4 @@
-if ["solo", "app", "app_master", "util"].include?(node["dna"]["instance_role"])
+if !node.engineyard.instance.database_server?
   instances = node["dna"]["engineyard"]["environment"]["instances"]
   redis_instance = (node["dna"]["instance_role"][/solo/] && instances.length == 1) ?
     instances[0] : instances.find { |i| i["name"] == node["redis"]["utility_name"] }
