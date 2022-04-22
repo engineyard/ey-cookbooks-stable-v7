@@ -48,6 +48,14 @@ class Chef
         role == "app_master"
       end
 
+      def app_server?
+        ["app_master", "solo", "app"].include?(role)
+      end
+
+      def database_server?
+        ["db_master", "db_slave", "db_replica"].include?(role)
+      end
+
       def solo?
         role == "solo"
       end

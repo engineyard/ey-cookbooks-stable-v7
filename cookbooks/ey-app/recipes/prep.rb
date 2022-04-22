@@ -1,8 +1,6 @@
 include_recipe "ey-deploy-keys"
 
-# TODO: Remove this chunk to the db_master recipe
-is_solo = ["solo"].include?(node["dna"]["instance_role"])
-unless is_solo # for solo leave the db stuff to the db cookbook
+unless node.engineyard.instance.solo? # for solo leave the db stuff to the db cookbook
   case node.engineyard.environment["db_stack_name"]
   when /^postgres\d+/, /^aurora-postgresql\d+/
     # include_recipe "postgresql::default"

@@ -15,6 +15,11 @@ if ["app_master", "app"].include?(node["dna"]["instance_role"])
     notifies :restart, "service[stonith]", :delayed
   end
 
+  logrotate "ey-stonith" do
+    files "/var/log/stonith.log"
+    copy_then_truncate true
+  end
+
   service "stonith" do
     provider Chef::Provider::Service::Systemd
     action [:start, :enable]
