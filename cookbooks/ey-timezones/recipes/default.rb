@@ -10,9 +10,9 @@ service "cron"
 link "/etc/localtime" do
   to "#{File.join(zonepath, zone)}"
   notifies :restart, "service[cron]", :delayed
-  	notifies :restart, "service[syslog-ng]", :delayed
+  notifies :restart, "service[syslog-ng]", :delayed
   if node.engineyard.instance.app_server?
-  	notifies :restart, "service[nginx]", :delayed
+    notifies :restart, "service[nginx]", :delayed
   end
   only_if { ::File.exist?(File.join(zonepath, zone)) && zone != "" && !zone.nil? }
 end

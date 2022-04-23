@@ -1,5 +1,5 @@
 include_recipe "ey-stonith"
-include_recipe "ey-ec2" if !node.engineyard.instance.database_server? 
+include_recipe "ey-ec2" unless node.engineyard.instance.database_server?
 include_recipe "ey-ephemeraldisk"
 
 descriptive_hostname = [
