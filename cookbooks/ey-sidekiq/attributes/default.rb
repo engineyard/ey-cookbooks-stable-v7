@@ -1,5 +1,4 @@
 default["sidekiq"].tap do |sidekiq|
-
   is_sidekiq_enabled = !!(fetch_env_var(node, "EY_SIDEKIQ_ENABLED", "false") =~ /^TRUE$/i)
 
   # By default we install sidekiq on all utility instances
