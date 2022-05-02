@@ -16,4 +16,4 @@ depends "ey-efs"
 depends "ey-monit"
 depends "ey-redis"
 depends "ey-sidekiq"
-
+depends "ey-packages"
