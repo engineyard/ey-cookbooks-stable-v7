@@ -1,0 +1,24 @@
+#!/bin/bash
+
+get_full_pkg_version() {
+  postgres_package="$1"
+  package_version="$2"
+  echo "$(apt-cache show ${postgres_package}=${package_version}* | grep 'Version:' | awk '{print $2}' 2>/dev/null)"
+}
+
+<% packages = ["postgresql-client-#{@postgres_version}", "postgresql-#{@postgres_version}", "postgresql-server-dev-#{@postgres_version}"] %>
+<% packages.each do |package| %>
+# Get the full version for the package <%= package %>
+PKG_VER="$(get_full_pkg_version "<%= package %>" "<%= @package_version %>")"
+if [[ -z "$PKG_VER" ]]; then
+  echo "Version <%= @package_version %> of <%= package %> not found"
+  exit 1
+fi
+echo "Installing <%= package %>"
+DEBIAN_FRONTEND=noninteractive apt install -y --allow-downgrades <%= package %>="$PKG_VER"
+<% if package == "postgresql-#{@postgres_version}" %>
+if [[ ! -n $(systemctl status postgresql | grep "Loaded.*/etc/systemd/system/postgresql.service") ]]; then
+  systemctl stop postgresql && rm -f /lib/systemd/system/postgresql.service
+fi
+<% end %>
+<% end %>

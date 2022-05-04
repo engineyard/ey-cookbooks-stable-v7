@@ -53,7 +53,11 @@ class Chef
       end
 
       def database_server?
-        ["db_master", "db_slave", "db_replica"].include?(role)
+        ["db_master", "db_slave", "db_replica", "solo"].include?(role)
+      end
+
+      def primary_database_server?
+        ["db_master", "solo"].include?(role)
       end
 
       def solo?
