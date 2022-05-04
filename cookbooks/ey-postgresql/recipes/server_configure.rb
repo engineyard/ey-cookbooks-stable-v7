@@ -230,7 +230,7 @@ template "#{postgres_root}/#{postgres_version}/data/pg_hba.conf" do
   })
 end
 
-# include_recipe "db-ssl::setup"
+include_recipe "ey-db-ssl::setup"
 
 template "/etc/systemd/system/postgresql.service" do
   source "postgresql.service.erb"
