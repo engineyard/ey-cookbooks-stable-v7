@@ -47,12 +47,6 @@ if `grep '/db ' /etc/fstab` == ""
         options "rw,noatime,data=ordered"
         action [:umount, :mount]
       end
-
-      bash "grow-db-ebs" do
-        code "resize2fs #{node['db_volume'].device}"
-        timeout 7200
-        only_if { node["db_volume"].found? }
-      end
       break
     end
     sleep 5
