@@ -4,7 +4,7 @@ if node.engineyard.instance.database_server?
   ey_cloud_report "start postgresql run" do
     message "processing postgresql #{postgres_version}"
   end
-  # include_recipe "ey-ebs::default"
+  include_recipe "ey-ebs::default"
   include_recipe "ey-postgresql::client_config"
   include_recipe "ey-postgresql::server_install"
   include_recipe "ey-postgresql::server_configure"
