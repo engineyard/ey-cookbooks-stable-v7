@@ -1,4 +1,4 @@
-db_hostname = node.engineyard.instance.solo? ? "localhost" : node.dna["db_host"]
+db_hostname = node.engineyard.instance.solo? ? "localhost" : node["dna"]["db_host"]
 admin_username = node.engineyard.environment["db_admin_username"]
 
 node.engineyard.apps.each do |app|

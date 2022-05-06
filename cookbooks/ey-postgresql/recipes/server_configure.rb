@@ -195,7 +195,7 @@ file "#{postgres_root}/#{postgres_version}/custom_pg_hba.conf" do
 end
 
 primary_interface = `ip route list | grep default | grep -E  'dev (\w+)' -o | awk '{print $2}'`
-ip = `ifconfig #{primary_interface} | grep inet | awk '{print $2}' | awk -F: '{print $NF}'`
+ip = `ip address show #{primary_interface} | grep inet | awk '{print $2}' | awk -F: '{print $NF}'`
 if ip =~ /^10\./
   cidr = "10.0.0.0/8"
 elsif ip =~ /^172\./
