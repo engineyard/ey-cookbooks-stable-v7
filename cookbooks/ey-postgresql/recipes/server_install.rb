@@ -51,7 +51,7 @@ ruby_block "check lock version" do
                         node["postgresql"]["latest_version"]
                       end
     package_version = known_versions.detect { |v| v =~ /^#{install_version}/ }
-    if package_version.nil?
+    if package_version.nil? and fetch_env_var(node, "EY_POSTGRES_VERSION").nil?
       Chef::Log.info "Chef does not know about PostgreSQL version #{install_version}"
       exit(1)
     end
