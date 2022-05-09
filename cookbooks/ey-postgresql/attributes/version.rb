@@ -18,7 +18,6 @@ unless fetch_env_var(node, "EY_POSTGRES_VERSION", ".").split(".")[0].nil?
   default["postgresql"]["short_version"] = fetch_env_var(node, "EY_POSTGRES_VERSION", ".").split(".")[0]
 end
 
-
 default["postgresql"]["datadir"] = "/db/postgresql/#{node['postgresql']['short_version']}/data/"
 default["postgresql"]["ssldir"] = "/db/postgresql/#{node['postgresql']['short_version']}/ssl/"
 default["postgresql"]["dbroot"] = "/db/postgresql/"

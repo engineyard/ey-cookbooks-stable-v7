@@ -95,7 +95,7 @@ end
 
 include_recipe "ey-cron"
 include_recipe "ey-env"
-# include_recipe "ey-backup::setup"
+include_recipe "ey-backup::setup"
 include_recipe "ey-ntp"
 include_recipe "ey-snapshot"
 include_recipe "ey-ssh_keys"

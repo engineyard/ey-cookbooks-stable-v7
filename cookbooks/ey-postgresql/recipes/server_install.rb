@@ -6,12 +6,12 @@ package_version = known_versions.detect { |v| v =~ /^#{install_version}/ }
 execute "dropping lock version file" do
   command "echo #{running_pg_version} > #{node['lock_version_file']}"
   action :run
-  only_if { lock_db_version and !File.exist?(node["lock_version_file"]) and pg_running }
+  only_if { lock_db_version && !File.exist?(node["lock_version_file"]) && pg_running }
 end
 
 execute "remove lock version file" do
   command "rm #{node['lock_version_file']}"
-  only_if { !lock_db_version and File.exist?(node["lock_version_file"]) }
+  only_if { !lock_db_version && File.exist?(node["lock_version_file"]) }
 end
 
 ey_cloud_report "postgresql" do
@@ -51,7 +51,7 @@ ruby_block "check lock version" do
                         node["postgresql"]["latest_version"]
                       end
     package_version = known_versions.detect { |v| v =~ /^#{install_version}/ }
-    if package_version.nil? and fetch_env_var(node, "EY_POSTGRES_VERSION").nil?
+    if package_version.nil? && fetch_env_var(node, "EY_POSTGRES_VERSION").nil?
       Chef::Log.info "Chef does not know about PostgreSQL version #{install_version}"
       exit(1)
     end

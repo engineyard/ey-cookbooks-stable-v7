@@ -34,4 +34,4 @@ cookbook_file "/root/.psqlrc" do
   action :create_if_missing
 end
 
-# include_recipe "ey-backup::postgres"
+include_recipe "ey-backup::postgres"
