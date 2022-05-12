@@ -1,6 +1,7 @@
 postgres_version = node["postgresql"]["short_version"]
 install_version = node["postgresql"]["latest_version"]
-known_versions = ["9.5.25", "9.6.24", "10.20", "10.12", "11.15"]
+known_versions = []
+`apt-cache madison postgresql-server-dev-#{postgres_version} |awk '{print $3'}`.split(/\n+/).each { |v| known_versions.append(v.split("-")[0]) }
 package_version = known_versions.detect { |v| v =~ /^#{install_version}/ }
 
 execute "dropping lock version file" do
@@ -51,9 +52,8 @@ ruby_block "check lock version" do
                         node["postgresql"]["latest_version"]
                       end
     package_version = known_versions.detect { |v| v =~ /^#{install_version}/ }
-    if package_version.nil? and fetch_env_var(node, "EY_POSTGRES_VERSION").nil?
-      Chef::Log.info "Chef does not know about PostgreSQL version #{install_version}"
-      exit(1)
+    if package_version.nil?
+      raise "Chef does not know about PostgreSQL version #{install_version} the current known versions of PostgreSQL for version #{postgres_version} are the following: #{known_versions} or contact support for more assistance"
     end
 
     run_context.resource_collection.find(template: "/tmp/src/postgresql/install.sh").variables package_version: package_version, postgres_version: postgres_version
