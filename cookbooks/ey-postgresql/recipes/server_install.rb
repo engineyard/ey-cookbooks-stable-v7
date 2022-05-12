@@ -7,12 +7,12 @@ package_version = known_versions.detect { |v| v =~ /^#{install_version}/ }
 execute "dropping lock version file" do
   command "echo #{running_pg_version} > #{node['lock_version_file']}"
   action :run
-  only_if { lock_db_version and !File.exist?(node["lock_version_file"]) and pg_running }
+  only_if { lock_db_version && !File.exist?(node["lock_version_file"]) && pg_running }
 end
 
 execute "remove lock version file" do
   command "rm #{node['lock_version_file']}"
-  only_if { !lock_db_version and File.exist?(node["lock_version_file"]) }
+  only_if { !lock_db_version && File.exist?(node["lock_version_file"]) }
 end
 
 ey_cloud_report "postgresql" do
@@ -55,7 +55,6 @@ ruby_block "check lock version" do
     if package_version.nil?
       raise "Chef does not know about PostgreSQL version #{install_version} the current known versions of PostgreSQL for version #{postgres_version} are the following: #{known_versions} or contact support for more assistance"
     end
-
     run_context.resource_collection.find(template: "/tmp/src/postgresql/install.sh").variables package_version: package_version, postgres_version: postgres_version
   end
 end
