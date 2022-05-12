@@ -13,9 +13,9 @@ when "postgres11", "aurora-postgresql11"
   default["postgresql"]["short_version"] = "11"
 end
 
-unless fetch_env_var(node, "EY_POSTGRES_VERSION", ".").split(".")[0].nil?
-  default["postgresql"]["latest_version"] = fetch_env_var(node, "EY_POSTGRES_VERSION", ".")
-  default["postgresql"]["short_version"] = fetch_env_var(node, "EY_POSTGRES_VERSION", ".").split(".")[0]
+unless fetch_env_var(node, "EY_POSTGRES_VERSION").nil?
+  default["postgresql"]["latest_version"] = fetch_env_var(node, "EY_POSTGRES_VERSION")
+  default["postgresql"]["short_version"] = fetch_env_var(node, "EY_POSTGRES_VERSION").split(".")[0]
 end
 
 default["postgresql"]["datadir"] = "/db/postgresql/#{node['postgresql']['short_version']}/data/"
