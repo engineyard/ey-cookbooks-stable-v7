@@ -1,3 +1,12 @@
+apt_repository "posgresql" do
+  uri "https://apt-archive.postgresql.org/pub/repos/apt"
+  distribution "#{`lsb_release -cs`.strip}-pgdg-archive"
+  components ["main"]
+  key "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+end.run_action(:add)
+
+apt_update
+
 postgres_version = node["postgresql"]["short_version"]
 install_version = node["postgresql"]["latest_version"]
 known_versions = []
@@ -25,12 +34,6 @@ end
 
 cookbook_file "/etc/postgresql-common/createcluster.conf" do
   source "createcluster.conf"
-end
-
-apt_repository "posgresql" do
-  uri "https://apt-archive.postgresql.org/pub/repos/apt"
-  distribution "#{`lsb_release -cs`.strip}-pgdg-archive"
-  components ["main"]
 end
 
 directory "/tmp/src/postgresql" do
