@@ -28,10 +28,9 @@ cookbook_file "/etc/postgresql-common/createcluster.conf" do
 end
 
 apt_repository "posgresql" do
-  uri "http://apt.postgresql.org/pub/repos/apt"
-  distribution "#{`lsb_release -cs`.strip}-pgdg"
+  uri "https://apt-archive.postgresql.org/pub/repos/apt"
+  distribution "#{`lsb_release -cs`.strip}-pgdg-archive"
   components ["main"]
-  key "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
 end
 
 directory "/tmp/src/postgresql" do
