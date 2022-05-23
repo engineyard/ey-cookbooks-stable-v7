@@ -9,7 +9,7 @@ when "postgres10", "aurora-postgresql10"
   default["postgresql"]["latest_version"] = "10.20"
   default["postgresql"]["short_version"] = "10"
 when "postgres11", "aurora-postgresql11"
-  default["postgresql"]["latest_version"] = "11.15"
+  default["postgresql"]["latest_version"] = "11.16"
   default["postgresql"]["short_version"] = "11"
 end
 
