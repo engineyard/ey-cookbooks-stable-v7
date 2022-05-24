@@ -39,7 +39,7 @@ default["redis"].tap do |redis|
 
   # Run Redis on a named util instance
   # This is the default
-  redis["utility_name"] = fetch_env_var(node, "EY_REDIS_INSTANCE_NAME", "")
+  redis["utility_name"] = fetch_env_var(node, "EY_REDIS_INSTANCE_NAME", "redis")
   redis_instances << redis["utility_name"]
   redis["is_redis_instance"] = (
     node["dna"]["instance_role"] == fetch_env_var(node, "EY_REDIS_INSTANCE_ROLE", "util") &&
