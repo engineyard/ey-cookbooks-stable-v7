@@ -52,6 +52,13 @@ class Chef
         ["app_master", "solo", "app"].include?(role)
       end
 
+      # Database instances are instances solely running database software.
+      # Database server is for instances that run database software, so it includes solo
+
+      def database_instance?
+        ["db_master", "db_slave", "db_replica"].include?(role)
+      end
+
       def database_server?
         ["db_master", "db_slave", "db_replica", "solo"].include?(role)
       end
