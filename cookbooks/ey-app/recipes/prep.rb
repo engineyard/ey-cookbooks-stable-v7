@@ -3,10 +3,10 @@ include_recipe "ey-deploy-keys"
 unless node.engineyard.instance.solo? # for solo leave the db stuff to the db cookbook
   case node.engineyard.environment["db_stack_name"]
   when /^postgres\d+/, /^aurora-postgresql\d+/
-    # include_recipe "postgresql::default"
+    include_recipe "postgresql::default"
   when /^mysql\d+/, /^aurora\d+/, /^mariadb\d+/
-    # include_recipe "mysql::client"
-    # include_recipe "mysql::user_my.cnf"
+    include_recipe "ey-mysql::client"
+    include_recipe "ey-mysql::user_my.cnf"
   when "no_db"
     # no-op
   end

@@ -1,4 +1,4 @@
-postgres_version = node["postgresql"]["short_version"].nil? || node["postgresql"]["short_version"].to_i == 11 ? "all" : node["postgresql"]["short_version"]
+postgres_version = node["postgresql"]["short_version"].nil? || node["postgresql"]["short_version"] == {} || node["postgresql"]["short_version"].to_i == 11 ? "all" : node["postgresql"]["short_version"]
 
 apt_repository "posgresql" do
   uri "http://apt.postgresql.org/pub/repos/apt"

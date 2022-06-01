@@ -5,7 +5,7 @@ provides :postgresql_slave
 unified_mode true
 property :password, String
 property :name, String, default: "deploy"
-property :postgres_version, String, default: node["postgresql"]["short_version"]
+property :postgres_version, String, default: "11.16"
 
 default_action :postgresql_slave_action
 
