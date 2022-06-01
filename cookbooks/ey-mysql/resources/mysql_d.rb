@@ -1,7 +1,7 @@
 provides :handle_mysql_d
 unified_mode true
 
-property :name, String, default: "MySQL" 
+property :name, String, default: "MySQL" # We set a default name as it is a requirement.
 
 default_action :action_handle_mysql_d
 
