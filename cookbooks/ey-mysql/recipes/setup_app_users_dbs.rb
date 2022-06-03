@@ -22,16 +22,12 @@ node.engineyard.apps.each do |app|
   end
 
   execute "remove-database-file-for-#{app.database_name}" do
-    command %(
-      rm /tmp/create.#{app.database_name}.sql
-    )
+    command %(rm /tmp/create.#{app.database_name}.sql)
     action :nothing
   end
 
   execute "create-database-for-#{app.database_name}" do
-    command %(
-      mysql -u #{node.engineyard.environment['db_admin_username']} -p'#{node.engineyard.environment['db_admin_password']}' < /tmp/create.#{app.database_name}.sql
-    )
+    command %(mysql -u #{node.engineyard.environment['db_admin_username']} -p'#{node.engineyard.environment['db_admin_password']}' < /tmp/create.#{app.database_name}.sql)
     notifies :run, "execute[remove-database-file-for-#{app.database_name}]"
   end
 end

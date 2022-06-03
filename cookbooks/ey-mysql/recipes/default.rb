@@ -1,6 +1,10 @@
 include_recipe "ey-ebs::default"
 innodb_buff = calc_innodb_buffer_pool()
 
+if node.engineyard.instance.arch_type == "arm64"
+  raise "Graviton instances are not supported for MySQL currently!"
+end
+
 # these are both 32-bit unique values, so why not?
 require "ipaddr"
 private_ip = node["ec2"]["local_ipv4"]
@@ -64,7 +68,6 @@ managed_template "/etc/mysql/percona-server.cnf" do
       datadir: node["mysql"]["datadir"],
       ssldir: node["mysql"]["ssldir"],
       mysql_version: Gem::Version.new(node["mysql"]["short_version"]),
-      mysql_5_6: Gem::Version.new("5.6"),
       mysql_5_7: Gem::Version.new("5.7"),
       mysql_full_version: `[ -f "/db/.lock_db_version" ] && grep -E -o '^[0-9]+\.[0-9]+\.[0-9]+' /db/.lock_db_version || echo #{node["mysql"]["latest_version"]} `.chomp,
       logbase: node["mysql"]["logbase"],

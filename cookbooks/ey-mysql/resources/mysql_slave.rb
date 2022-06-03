@@ -86,34 +86,27 @@ action :action_mysql_slave do
 
   file "#{node['mysql']['datadir']}/master.info" do
     action :delete
-    only_if { File.exist?("#{node['mysql']['datadir']}/master.info") and !volume_from_slave_snapshot }
+    only_if { File.exist?("#{node['mysql']['datadir']}/master.info") && !volume_from_slave_snapshot }
   end
 
   file "#{node['mysql']['datadir']}/relay-log.info" do
     action :delete
-    only_if { File.exist?("#{node['mysql']['datadir']}/relay-log.info") and !volume_from_slave_snapshot }
+    only_if { File.exist?("#{node['mysql']['datadir']}/relay-log.info") && !volume_from_slave_snapshot }
   end
 
   execute "remove relay-log.*" do
     cwd node["mysql"]["datadir"]
     command "rm -f #{node['mysql']['datadir']}/relay-log.*"
-    only_if { !Dir.glob("#{node['mysql']['datadir']}/relay-log.*").empty? and !volume_from_slave_snapshot }
+    only_if { !Dir.glob("#{node['mysql']['datadir']}/relay-log.*").empty? && !volume_from_slave_snapshot }
   end
 
   execute "remove slave-relay*" do
     cwd node["mysql"]["datadir"]
     command "rm -f #{node['mysql']['datadir']}/slave-relay*"
-    only_if { !Dir.glob("#{node['mysql']['datadir']}/slave-relay*").empty? and !volume_from_slave_snapshot }
+    only_if { !Dir.glob("#{node['mysql']['datadir']}/slave-relay*").empty? && !volume_from_slave_snapshot }
   end
 
-  # the master writes it's uuid to <datadir>/auto.cnf, the slave needs that removed so it will gen it's own
-  execute "remove auto.cnf" do
-    cwd node["mysql"]["datadir"]
-    command "rm -f #{node['mysql']['datadir']}/auto.cnf"
-    only_if { node["mysql"]["short_version"] >= "5.6" }
-  end
-
-  include_recipe "mysql::startup"
+  include_recipe "ey-mysql::startup"
 
   template "/tmp/clear_binlogs_from_slave.sh" do
     owner "root"
