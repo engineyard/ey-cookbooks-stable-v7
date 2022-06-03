@@ -16,15 +16,11 @@ template "/tmp/root_perms.sql" do
 end
 
 execute "remove-default-permissions-file" do
-  command %(
-    rm /tmp/root_perms.sql
-  )
+  command %(rm /tmp/root_perms.sql)
   action :nothing
 end
 
 execute "set-default-permisions" do
-  command %(
-    export MYSQL_PWD=#{node.engineyard.environment['db_admin_password']}; mysql -u root < /tmp/root_perms.sql
-  )
+  command %(export MYSQL_PWD=#{node.engineyard.environment['db_admin_password']}; mysql -u root < /tmp/root_perms.sql)
   notifies :run, "execute[remove-default-permissions-file]"
 end

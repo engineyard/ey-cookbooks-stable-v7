@@ -24,8 +24,7 @@ resources_collection.each do |r|
   updating = false if r.to_s == "execute[stop-of-mysql-slave]"
 
   if updating && (!r.not_if || r.not_if.empty?)
-    # Chef::Log.info("-----Dynamically adding not_if to resource #{r.to_s})
-    r.not_if do # sets a not_if on the individual resource
+    r.not_if do
       mysql_slave_is_slavey?
     end
   end

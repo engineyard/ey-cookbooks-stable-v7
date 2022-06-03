@@ -19,7 +19,7 @@ class Chef
       end
 
       def arch_type
-        case node["kernel"]["machine"]
+        case @node["kernel"]["machine"]
         when /(x86.*)/
           "amd64"
         when /(aarch.*)/
