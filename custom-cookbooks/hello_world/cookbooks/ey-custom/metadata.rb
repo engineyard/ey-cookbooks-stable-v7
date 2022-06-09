@@ -1,4 +1,4 @@
-name "hello-world"
+name "ey-custom"
 version "1.0.0"
 
 depends "hello_world"
