@@ -18,3 +18,4 @@ depends "ey-redis"
 depends "ey-sidekiq"
 depends "ey-packages"
 depends "ey-backup"
+depends 'ey-nodejs'
