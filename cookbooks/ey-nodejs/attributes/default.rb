@@ -9,7 +9,7 @@ version = begin
 fallback_nodejs_version = case version
                           when "nodejs_14"
                             "14.19.3"
-                          when "nodejs_15"
+                          when "nodejs_16"
                             "16.15.1"
                           when "nodejs_18"
                             "18.3.0"
