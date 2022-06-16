@@ -61,8 +61,6 @@ node.engineyard.apps.each do |app|
     mode "600"
     source "unicorn.monitrc.erb"
     variables(
-      lazy {
-        {
           app: app.name,
           user: node.engineyard.environment.ssh_username,
           app_type: app.app_type,
@@ -70,10 +68,8 @@ node.engineyard.apps.each do |app|
           environment: node["dna"]["environment"]["framework_env"],
           master_memory_size: term_conds[:memory_size],
           master_cycle_count: term_conds[:base_cycles],
-          worker_mem_cycle_checks: term_conds[:memory_cycle_checks],
-        }
-      }
-    )
+          worker_mem_cycle_checks: term_conds[:memory_cycle_checks]
+        )
     backup 0
 
     notifies :run, "execute[reload-monit]", :delayed
