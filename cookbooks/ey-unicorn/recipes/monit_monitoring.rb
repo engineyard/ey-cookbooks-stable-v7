@@ -44,12 +44,12 @@ node.engineyard.apps.each do |app|
     group node.engineyard.environment.ssh_username
     mode "644"
     action :create
-    variables(
-          unicorn_instance_count: [recipe.get_pool_size / node["dna"]["applications"].size, 1].max,
-          app: app.name,
-          type: app.app_type,
-          user: node.engineyard.environment.ssh_username
-        )
+    variables({
+      unicorn_instance_count: [recipe.get_pool_size / node["dna"]["applications"].size, 1].max,
+      app: app.name,
+      type: app.app_type,
+      user: node.engineyard.environment.ssh_username,
+    })
     source "unicorn.rb.erb"
   end
 
@@ -60,16 +60,16 @@ node.engineyard.apps.each do |app|
     group node.engineyard.environment.ssh_username
     mode "600"
     source "unicorn.monitrc.erb"
-    variables(
-          app: app.name,
-          user: node.engineyard.environment.ssh_username,
-          app_type: app.app_type,
-          unicorn_worker_count: [recipe.get_pool_size / node["dna"]["applications"].size, 1].max,
-          environment: node["dna"]["environment"]["framework_env"],
-          master_memory_size: term_conds[:memory_size],
-          master_cycle_count: term_conds[:base_cycles],
-          worker_mem_cycle_checks: term_conds[:memory_cycle_checks]
-        )
+    variables({
+      app: app.name,
+      user: node.engineyard.environment.ssh_username,
+      app_type: app.app_type,
+      unicorn_worker_count: [recipe.get_pool_size / node["dna"]["applications"].size, 1].max,
+      environment: node["dna"]["environment"]["framework_env"],
+      master_memory_size: term_conds[:memory_size],
+      master_cycle_count: term_conds[:base_cycles],
+      worker_mem_cycle_checks: term_conds[:memory_cycle_checks],
+    })
     backup 0
 
     notifies :run, "execute[reload-monit]", :delayed
