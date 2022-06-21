@@ -19,7 +19,7 @@ action :install do
       ext_details = node["pg_ext_details"][ext_name] || {}
 
       # Postgis needs some package work
-      include_recipe "postgresql::postgis_build" if ext_name[/^postgis/]
+      include_recipe "ey-postgresql::postgis_build" if ext_name[/^postgis/]
 
       db_names.each do |db_name|
         # bail with a log message if the extension isn't supported for the active Postgres major version
@@ -64,8 +64,8 @@ action :install do
         end
 
         # these needs some configuration
-        include_recipe "postgresql::auto_explain" if ext_name == "auto_explain"
-        include_recipe "postgresql::pg_stat_statements" if ext_name == "pg_stat_statements"
+        include_recipe "ey-postgresql::auto_explain" if ext_name == "auto_explain"
+        include_recipe "ey-postgresql::pg_stat_statements" if ext_name == "pg_stat_statements"
       end
     end
   end
