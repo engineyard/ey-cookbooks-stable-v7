@@ -2,6 +2,10 @@ include_recipe "ey-nginx::install"
 
 Chef::Log.info "instance role: #{node['dna']['instance_role']}"
 
+letsencrypt = fetch_env_var(node, "EY_LETSENCRYPT_ENABLED") || false
+
+Chef::Log.info "LetsEncrypt Enabled: #{letsencrypt}"
+
 service "nginx" do
   provider Chef::Provider::Service::Systemd
   action :nothing
