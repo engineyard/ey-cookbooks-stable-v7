@@ -15,6 +15,7 @@ node.engineyard.apps.each_with_index do |app, _index|
         env_name: node.engineyard.environment["name"],
         haproxy_nginx_port: !(count == 0) ? node["nginx"]["nginx_haproxy_https_port"] : node["nginx"]["nginx_haproxy_http_port"],
         xlb_nginx_port: !(count == 0) ? node["nginx"]["nginx_xlb_https_port"] : node["nginx"]["nginx_xlb_http_port"],
+        app_instance: is_app_master,
         http2: node["nginx"]["http2"],
         ssl: !(count == 0)
       )
