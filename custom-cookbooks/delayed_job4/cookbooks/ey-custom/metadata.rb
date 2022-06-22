@@ -1,3 +1,3 @@
-name 'ey-custom'
+name "ey-custom"
 
-depends 'custom-delayed_job4'
+depends "custom-delayed_job4"

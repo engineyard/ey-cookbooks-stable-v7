@@ -1,1 +1,1 @@
-include_recipe 'ey-delayed-job4'
+include_recipe "ey-delayed-job4"

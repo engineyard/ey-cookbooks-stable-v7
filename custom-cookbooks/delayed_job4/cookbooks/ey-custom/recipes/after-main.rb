@@ -1,1 +1,1 @@
-include_recipe 'custom-delayed_job4'
+include_recipe "custom-delayed_job4"
