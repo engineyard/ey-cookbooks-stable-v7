@@ -3,7 +3,7 @@ version "1.0.0"
 
 depends "ey-deploy-keys"
 depends "ey-app-logs"
-# depends "unicorn"
+depends "ey-unicorn"
 # depends "passenger5"
 depends "ey-puma"
 # depends "monit"
