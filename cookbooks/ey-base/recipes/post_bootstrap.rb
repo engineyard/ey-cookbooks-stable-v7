@@ -1,4 +1,5 @@
 include_recipe "ey-monit"
+include_recipe "ey-collectd"
 include_recipe "ey-nodejs::common"
 include_recipe "ey-nodejs::yarn"
 
