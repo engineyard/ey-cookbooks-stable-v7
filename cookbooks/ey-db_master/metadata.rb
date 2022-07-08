@@ -1,6 +1,6 @@
 name "ey-db_master"
 version "1.0.0"
 depends "ey-lib"
-# depends "mysql"
+depends "ey-mysql"
 depends "ey-postgresql"
-depends "db_admin_tools"
+depends "ey-db_admin_tools"
