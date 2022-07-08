@@ -33,7 +33,7 @@ alert ()
 
 
 
-if [[ $(sudo openssl x509 -in /etc/letsencrypt/live/<%= @md %>/cert.pem -checkend 604800 -noout |grep "Certificate will expire" --ignore-case) ]]; then
+if [[ $(sudo openssl x509 -in /etc/letsencrypt/live/<%= @md.sub('*.', '') %>/cert.pem -checkend 604800 -noout |grep "Certificate will expire" --ignore-case) ]]; then
   alert "Certificate is invalid" "FAILURE"
 else
   alert "Certificate is valid" "OKAY"
