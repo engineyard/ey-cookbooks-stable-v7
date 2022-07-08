@@ -5,7 +5,7 @@ We're glad you want to contribute to a Engine Yard v7 Cookbooks repository ! Thi
 ## Instructions for creating a cookbook
 
 1. Clone the repository or pull the latest changes! `git clone` or `git fetch`.
-2. Install cookstyle this can be done with `gem install cookstyle`. This is required for the linting process. (Cook style version **1.25.1 or higher**
+2. Install cookstyle this can be done with `gem install cookstyle`. This is required for the linting process. (Make sure cookstyle is version **1.25.1 or higher**
 3. If you're creating or migrating a base recipe that is used by the default chef process, make sure the recipe starts with `ey-` for example `ey-core`. 
 4. Create your cookbook
 5. The metadata must have a version number in it
