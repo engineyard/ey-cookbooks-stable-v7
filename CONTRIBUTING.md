@@ -5,7 +5,7 @@ We're glad you want to contribute to a Engine Yard v7 Cookbooks repository ! Thi
 ## Instructions for creating a cookbook
 
 1. Clone the repository or pull the latest changes! `git clone` or `git fetch`.
-2. Install cookstyle this can be done with `gem install cookstyle`. This is required for the linting process.
+2. Install cookstyle this can be done with `gem install cookstyle`. This is required for the linting process. (Cook style version **1.25.1 or higher**
 3. If you're creating or migrating a base recipe that is used by the default chef process, make sure the recipe starts with `ey-` for example `ey-core`. 
 4. Create your cookbook
 5. The metadata must have a version number in it
@@ -14,7 +14,7 @@ We're glad you want to contribute to a Engine Yard v7 Cookbooks repository ! Thi
 
 ## Steps required for Pull Request submitting
 
-1. Ensure you are working in a branch in <b>ey-cookbooks-stable-v6</b>
+1. Ensure you are working in a branch in <b>ey-cookbooks-stable-v7</b>
  * If you are contributing from outside EngineYard, please create a fork and create a pull request we will suggest any code changes in the comments.
  * The branch should be named after the feature being worked on. Ticket id (For example: CC-1123 ) should be used instead of feature name if you are Engine Yard employee.
 2. Please use cookstyle to make sure your recipe passes the linting process, we will make any changes to rubocop.yml as needed
