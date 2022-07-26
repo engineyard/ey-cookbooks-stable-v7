@@ -76,4 +76,12 @@ cookbook_file "/root/.gemrc" do
   source "gemrc"
 end
 
+["ruby", "gem", "bundler", "bundle"].each do |binary|
+  link "/usr/bin/#{binary}" do
+    to "/opt/rubies/#{ruby}/bin/#{binary}"
+    only_if { ::File.exist?("/opt/rubies/#{ruby}/bin") }
+    action :create
+  end
+end
+
 include_recipe "ey-ruby::rubygems"
