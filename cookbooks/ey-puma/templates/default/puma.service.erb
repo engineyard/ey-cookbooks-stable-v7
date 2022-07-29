@@ -1,0 +1,33 @@
+[Unit]
+Description=<%= @app %> Puma
+After=network.target
+
+Requires=puma_<%= @app %>.socket
+
+[Service]
+Type=notify
+
+EnvironmentFile=/data/<%= @app %>/shared/config/env
+
+<% if @cloudvar %>
+EnvironmentFile=/data/<%= @app %>/shared/config/env.cloud
+<% end %>
+<% if @customvar %>
+EnvironmentFile=/data/<%= @app %>/shared/config/env.custom
+<% end %>
+
+WatchdogSec=60
+
+MemoryMax=<%= @app_memory_limit %>M
+
+
+User=<%= @username %>
+
+WorkingDirectory=/data/<%= @app %>/current
+
+ExecStart=/data/<%= @app %>/current/ey_bundler_binstubs/puma -w <%= @workers %>:<%= @workers %> -e <%= @framework_env %> --bind unix:///var/run/engineyard/<%= @app %>/puma_<%= @app %>.sock --port <%= @port %> --control-url unix:///var/run/engineyard/<%= @app %>/puma_<%= @app %>-ctl.sock --state /var/run/engineyard/<%= @app %>/puma_<%= @app %>.state
+
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

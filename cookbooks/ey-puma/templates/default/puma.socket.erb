@@ -1,0 +1,16 @@
+[Unit]
+Description=Puma HTTP Server Accept Sockets for <%= @app %>
+
+[Socket]
+ListenStream=0.0.0.0:<%= @port %>
+
+ListenStream=/var/run/engineyard/<%= @app %>/puma_<%= @app %>.sock
+ListenStream=/var/run/engineyard/<%= @app %>/puma_<%= @app %>-ctl.sock
+
+# Socket options matching Puma defaults
+NoDelay=true
+ReusePort=true
+Backlog=1024
+
+[Install]
+WantedBy=sockets.target
