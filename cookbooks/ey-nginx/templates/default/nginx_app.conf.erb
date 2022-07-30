@@ -6,7 +6,7 @@ upstream <%= @vhost.app.name %>_upstream {
     <% if @stack == "nginx_passenger5"  %>
     server 127.0.0.1:<%= @upstream_port %>;
     <% end %>
-    <% if @stack == "puma" %>
+    <% if @stack == "puma_legacy" %>
       <% @upstream_port.each do |port| %>
         server 127.0.0.1:<%= port %>;
       <% end %>
