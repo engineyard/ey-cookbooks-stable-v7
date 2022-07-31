@@ -14,7 +14,7 @@ service "nginx" do
 end
 
 workers = get_pool_size
-if node.stack.match(/puma_legacy/)
+if node.stack.match(/pumalegacy/)
   workers = [(1.0 * get_pool_size() / node["dna"]["applications"].size).round, 1].max
 end
 

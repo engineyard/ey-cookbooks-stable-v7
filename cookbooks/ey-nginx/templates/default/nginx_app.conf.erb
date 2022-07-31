@@ -6,7 +6,7 @@ upstream <%= @vhost.app.name %>_upstream {
     <% if @stack == "nginx_passenger5"  %>
     server 127.0.0.1:<%= @upstream_port %>;
     <% end %>
-    <% if @stack == "puma_legacy" %>
+    <% if @stack == "pumalegacy" %>
       <% @upstream_port.each do |port| %>
         server 127.0.0.1:<%= port %>;
       <% end %>
@@ -14,6 +14,8 @@ upstream <%= @vhost.app.name %>_upstream {
     <% if @stack == "nginx_unicorn" %>
     server unix:/var/run/engineyard/unicorn_<%= @vhost.app.name %>.sock fail_timeout=0;
     <% end %>
+    <% if @stack == "puma" %>
+    server unix:/var/run/engineyard/<%= @vhost.app.name %>/puma_<%= @vhost.app.name %>.sock
 }
 
 server {

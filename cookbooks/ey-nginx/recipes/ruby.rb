@@ -5,13 +5,13 @@ is_app_master = ["app_master", "solo"].include?(node["dna"]["instance_role"]) ||
 # Temp
 
 # To be imporved at a later date by getting variables from env_vars and node values of puma rather than setting them multiple times
-if node.stack.match(/puma_legacy/)
+if node.stack.match(/pumalegacy/)
   base_port = 8000
   stepping = 200
 end
 
 node.engineyard.apps.each_with_index do |app, index|
-  if node.stack.match(/puma_legacy/)
+  if node.stack.match(/pumalegacy/)
     app_base_port = base_port + (stepping * index)
     workers = [(1.0 * get_pool_size() / node["dna"]["applications"].size).round, 1].max
     ports = (app_base_port...(app_base_port + workers)).to_a
