@@ -15,7 +15,7 @@ upstream <%= @vhost.app.name %>_upstream {
     server unix:/var/run/engineyard/unicorn_<%= @vhost.app.name %>.sock fail_timeout=0;
     <% end %>
     <% if @stack == "puma" %>
-    server unix:/var/run/engineyard/<%= @vhost.app.name %>/puma_<%= @vhost.app.name %>.sock
+    server unix:/var/run/engineyard/<%= @vhost.app.name %>/puma_<%= @vhost.app.name %>.sock;
 }
 
 server {
