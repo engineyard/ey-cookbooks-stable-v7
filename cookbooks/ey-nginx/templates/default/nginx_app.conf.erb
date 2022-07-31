@@ -16,6 +16,7 @@ upstream <%= @vhost.app.name %>_upstream {
     <% end %>
     <% if @stack == "puma" %>
     server unix:/var/run/engineyard/<%= @vhost.app.name %>/puma_<%= @vhost.app.name %>.sock;
+    <% end %>
 }
 
 server {
