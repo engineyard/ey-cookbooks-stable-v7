@@ -38,9 +38,9 @@ class Chef
 
       case crontab_instance_name
       when ""
-        true if app_master_or_solo?(node)
+        return true if app_master_or_solo?(node)
       else
-        true if utility_named?(node, crontab_instance_name)
+        return true if utility_named?(node, crontab_instance_name)
       end
 
       false
