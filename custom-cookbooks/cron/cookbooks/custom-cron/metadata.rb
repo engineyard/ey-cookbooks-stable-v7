@@ -1,3 +1,4 @@
-name 'custom-cron'
+name "custom-cron"
+version "1.0.0"
 
-depends 'ey-cron'
+depends "ey-cron"

@@ -1,1 +1,1 @@
-include_recipe 'custom-cron::default'
+include_recipe "custom-cron::default"

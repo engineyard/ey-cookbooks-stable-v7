@@ -41,8 +41,8 @@ Yard.
   ```
   cd ~ # Change this to your preferred directory. Anywhere but inside the application
 
-  git clone https://github.com/engineyard/ey-cookbooks-stable-v6
-  cd ey-cookbooks-stable-v6
+  git clone https://github.com/engineyard/ey-cookbooks-stable-v7
+  cd ey-cookbooks-stable-v7
   cp custom-cookbooks/packages/cookbooks/custom-packages /path/to/app/cookbooks/
   ```
 
