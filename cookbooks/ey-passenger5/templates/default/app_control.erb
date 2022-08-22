@@ -8,14 +8,14 @@ fi
 custom_env="/data/<%= @app_name %>/shared/config/env.custom"
 cloud_env="/data/<%= @app_name %>/shared/config/env.cloud"
 
-# Load the custom envxists
-# [[ -f "${custom_env}" ]] && source "${custom_env}"
-#
-# # Load the cloud env if it exists
-# [[ -f "${cloud_env}" ]] && source "d_env}"
+# Load the custom env exists
+[[ -f "${custom_env}" ]] && source "${custom_env}"
+
+# Load the cloud env if it exists
+[[ -f "${cloud_env}" ]] && source "${cloud_env}"
 export HOME="/home/<%= @user %>"
-source "/data/<%= @app_name %>/shared/config/env.custom"
-source "/data/<%= @app_name %>/shared/config/env.cloud"
+#source "/data/<%= @app_name %>/shared/config/env.custom"
+#source "/data/<%= @app_name %>/shared/config/env.cloud"
 
 cd /data/<%= @app_name %>/
 
