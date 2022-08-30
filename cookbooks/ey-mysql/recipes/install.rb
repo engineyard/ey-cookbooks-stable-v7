@@ -30,12 +30,12 @@ if node["dna"]["instance_role"][/^(db|solo)/]
   execute "dropping lock version file" do
     command "echo $(mysql --version | grep -E -o '(Distrib|Ver) [0-9]+\.[0-9]+\.[0-9]+' | awk '{print $NF}') > #{lock_version_file}"
     action :run
-    only_if { lock_db_version && !File.exist?(lock_version_file) && db_running }
+    only_if { lock_db_version && !::File.exist?(lock_version_file) && db_running }
   end
 
   execute "remove lock version file" do
     command "rm #{lock_version_file}"
-    only_if { !lock_db_version && File.exist?(lock_version_file) }
+    only_if { !lock_db_version && ::File.exist?(lock_version_file) }
   end
 end
 
@@ -70,7 +70,7 @@ if node["dna"]["instance_role"][/db|solo/]
   end
 end
 
-install_version = if File.exist?(node["lock_version_file"])
+install_version = if ::File.exist?(node["lock_version_file"])
                     `cat #{node["lock_version_file"]}`.strip
                   else
                     node["mysql"]["latest_version"]

@@ -75,7 +75,7 @@ action :action_mysql_slave do
   ruby_block "read-master-status" do
     block do
       unless volume_from_slave_snapshot
-        file_contents = File.read("/db/mysql/.snapshot_backup_master_status.txt")
+        file_contents = ::File.read("/db/mysql/.snapshot_backup_master_status.txt")
         node.override["master_log_file"] = file_contents.match(/File:(.*)\n/)[1].strip
         node.override["master_log_pos"] = file_contents.match(/Position:(.*)\n/)[1].strip
         Chef::Log.info("using master_log_file: " + node["master_log_file"].inspect)
@@ -86,12 +86,12 @@ action :action_mysql_slave do
 
   file "#{node['mysql']['datadir']}/master.info" do
     action :delete
-    only_if { File.exist?("#{node['mysql']['datadir']}/master.info") && !volume_from_slave_snapshot }
+    only_if { ::File.exist?("#{node['mysql']['datadir']}/master.info") && !volume_from_slave_snapshot }
   end
 
   file "#{node['mysql']['datadir']}/relay-log.info" do
     action :delete
-    only_if { File.exist?("#{node['mysql']['datadir']}/relay-log.info") && !volume_from_slave_snapshot }
+    only_if { ::File.exist?("#{node['mysql']['datadir']}/relay-log.info") && !volume_from_slave_snapshot }
   end
 
   execute "remove relay-log.*" do
