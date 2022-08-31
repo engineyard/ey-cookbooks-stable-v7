@@ -106,6 +106,14 @@ action :action_mysql_slave do
     only_if { !Dir.glob("#{node['mysql']['datadir']}/slave-relay*").empty? && !volume_from_slave_snapshot }
   end
 
+  # the master writes it's uuid to <datadir>/auto.cnf, the slave needs that removed so it will gen it's own
+  execute "remove auto.cnf" do
+    cwd node['mysql']['datadir']
+    command "rm -f #{node['mysql']['datadir']}/auto.cnf"
+    only_if { node['mysql']['short_version'] >= '5.6' }
+  end
+
+
   include_recipe "ey-mysql::startup"
 
   template "/tmp/clear_binlogs_from_slave.sh" do
