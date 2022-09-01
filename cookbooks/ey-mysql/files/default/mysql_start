@@ -66,8 +66,8 @@ class MysqlStart
           log_mysql_event("MySQL did not start, zapping")
           begin
             pidfile = '/var/run/mysqld/mysqld.pid'
-            if File.exists?(pidfile)
-              File.open('/var/run/mysqld/mysqld.pid', 'r') do |f|
+            if ::File.exists?(pidfile)
+              ::File.open('/var/run/mysqld/mysqld.pid', 'r') do |f|
                 pid = f.read.to_i
                 Process.kill("TERM", pid)
   
@@ -86,7 +86,7 @@ class MysqlStart
               end
             end
           rescue Exception => e
-            File.open('/root/chef-mysql.log', 'a') do |f|
+            ::File.open('/root/chef-mysql.log', 'a') do |f|
               f.write("Blew up: \n")
               f.write(e.message)
               f.write("\n")
