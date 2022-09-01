@@ -1,6 +1,6 @@
 is_app_master = ["app_master", "solo"].include?(node["dna"]["instance_role"]) || false
 
-# app_base_port = node["passenger5"]["port"].to_i
+ports = node["passenger5"]["port"].to_i
 
 # Temp
 
