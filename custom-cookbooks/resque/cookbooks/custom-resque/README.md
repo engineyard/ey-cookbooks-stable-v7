@@ -43,7 +43,7 @@ If you do not have `cookbooks/ey-custom` on your app repository, you can copy `c
 
 ## Dependencies
 
-`resque` depends on Redis. We recommend using the [Redis recipe](https://github.com/engineyard/ey-cookbooks-stable-v6/tree/master/cookbooks/redis) to setup Redis on the environment.
+`resque` depends on Redis. We recommend using the [Redis recipe](https://github.com/engineyard/ey-cookbooks-stable-v7/tree/master/cookbooks/redis) to setup Redis on the environment.
 
 ## Customizations
 
