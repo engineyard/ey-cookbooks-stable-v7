@@ -107,12 +107,10 @@ action :action_mysql_slave do
   end
 
   # the master writes it's uuid to <datadir>/auto.cnf, the slave needs that removed so it will gen it's own
-  execute "remove auto.cnf" do
-    cwd node['mysql']['datadir']
-    command "rm -f #{node['mysql']['datadir']}/auto.cnf"
-    only_if { node['mysql']['short_version'] >= '5.6' }
-  end
-
+  file "#{node['mysql']['datadir']}/auto.cnf" do
+        action :delete
+        Chef::Log.info("removing <datadir>/auto.cnf")
+      end
 
   include_recipe "ey-mysql::startup"
 
