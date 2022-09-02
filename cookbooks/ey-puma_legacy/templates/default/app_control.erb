@@ -13,6 +13,7 @@ cloud_env="/data/${application}/shared/config/env.cloud"
 [[ -f "${cloud_env}" ]] && source "${cloud_env}"
 
 source /etc/profile
+source /data/<%= @app_name %>/shared/config/env
 
 # Ensure that we are running as the root user.
 # If not, error exit while notifying the user.
