@@ -23,7 +23,7 @@ def delete_cron_jobs_not_in_custom(user, crons)
 end
 
 if crontab_instance?(node)
-  if node["custom_crons"]; then
+  if node["custom_crons"]
     # Find all cron jobs specified in attributes/cron.rb where current node matches instance_name
     named_crons = node["custom_crons"].find_all { |c| c[:instance_name] == node["dna"]["name"] }
 
