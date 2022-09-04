@@ -110,7 +110,7 @@ action :action_mysql_slave do
   file "#{node['mysql']['datadir']}/auto.cnf" do
      action :delete
      Chef::Log.info("removing <datadir>/auto.cnf")
-     only_if { node['mysql']['short_version'] >= '5.6' }   
+     only_if { node["mysql"]["short_version"] >= "5.6" }   
   end
 
   include_recipe "ey-mysql::startup"
