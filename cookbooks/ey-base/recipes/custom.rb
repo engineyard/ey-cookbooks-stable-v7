@@ -3,7 +3,7 @@ if fetch_env_var(node, "EY_REDIS_ENABLED") =~ /^TRUE$/i
 end
 
 if fetch_env_var(node, "EY_MEMCACHED_ENABLED") =~ /^TRUE$/i
-  include_recipe "memcached"
+  include_recipe "ey-memcached"
 end
 
 if fetch_env_var(node, "EY_SIDEKIQ_ENABLED") =~ /^TRUE$/i
