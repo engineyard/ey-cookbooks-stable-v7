@@ -4,11 +4,10 @@ end
 
 apt_repository "newrelic-infra" do
   uri "https://download.newrelic.com/infrastructure_agent/linux/apt"
-  distribution "focal"
+  distribution "#{`lsb_release -cs`.strip}"
   components ["main"]
+  key "https://download.newrelic.com/infrastructure_agent/gpg/newrelic-infra.gpg"
 end.run_action(:add)
-
-apt_update
 
 license_key = if node["newrelic_infra"]["use_newrelic_addon"]
                 newrelic_license_key
@@ -30,8 +29,7 @@ template "/etc/newrelic-infra.yml" do
   })
 end
 
-execute "curl -s https://download.newrelic.com/infrastructure_agent/gpg/newrelic-infra.gpg | sudo apt-key add -" do
-end
+apt_update
 
 package "newrelic-infra" do
   action :install
