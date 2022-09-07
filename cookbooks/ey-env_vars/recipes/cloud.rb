@@ -12,5 +12,13 @@ if ["solo", "app", "app_master", "util"].include?(node["dna"]["instance_role"])
       variables(environment_variables: fetch_environment_variables(app_data))
       helpers(EnvVars::Helper)
     end
+    template "/data/#{app_name}/shared/config/env.systemctl" do
+      source "env.systemctl.erb"
+      owner ssh_username
+      group ssh_username
+      mode "0744"
+      variables(environment_variables: fetch_environment_variables(app_data))
+      helpers(EnvVars::Helper)
+    end
   end
 end
