@@ -54,7 +54,7 @@ deploy() {
 stop() {
   if is_running ; then
     echo "Stopping Puma for ${application} ..."
-    systemctl stop puma_<%= @app_name %>
+    systemctl stop puma_<%= @app_name %>.socket puma_<%= @app_name %>.service
     exit 1
   else
     echo "ERROR: Doesn't seem puma is running for <%= @app_name %>"
@@ -63,7 +63,7 @@ stop() {
 }
 
 restart() {
-  systemctl restart puma_<%= @app_name %>.socket
+  systemctl restart puma_<%= @app_name %>.socket puma_<%= @app_name %>.service
 }
 
 
@@ -80,11 +80,14 @@ case "$ACTION" in
   status)
     status
     ;;
-  restart)
+  hot_restart)
     deploy
     ;;
+  hard_restart)
+    restart
+    ;;
   *)
-    echo "Usage: $0 {start|stop|status|restart|deploy}"
+    echo "Usage: $0 {start|stop|status|hot_restart|hart_restart|deploy}"
     exit 1
     ;;
 esac
