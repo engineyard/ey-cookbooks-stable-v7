@@ -8,10 +8,10 @@
 source /etc/profile
 source /data/<%= @app_name %>/shared/config/env
 <% if @customvar %>
-source /data/<%= @app_name %>/shared/config/env.systemctl
+source /data/<%= @app_name %>/shared/config/env.custom
 <% end %>
 <% if @cloudvar %>
-source /data/<%= @app_name %>/shared/config/env.cloud
+source /data/<%= @app_name %>/shared/config/env.systemctl
 <% end %>
 
 
