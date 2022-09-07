@@ -25,6 +25,7 @@ framework = node.engineyard.environment["framework_env"]
 end
 
 include_recipe "ey-cron::ui"
+include_recipe "ey-cron::custom"
 
 directory "/etc/systemd/system/cron.service.d" do
   owner "root"
