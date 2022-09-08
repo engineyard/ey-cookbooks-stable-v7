@@ -25,7 +25,7 @@ User=<%= @username %>
 
 WorkingDirectory=/data/<%= @app %>/current
 
-ExecStart=/data/<%= @app %>/current/ey_bundler_binstubs/puma -w <%= @workers %>:<%= @workers %> -e <%= @framework_env %> --bind unix:///var/run/engineyard/<%= @app %>/puma_<%= @app %>.sock --port <%= @port %> --control-url unix:///var/run/engineyard/<%= @app %>/puma_<%= @app %>-ctl.sock --state /var/run/engineyard/<%= @app %>/puma_<%= @app %>.state --dir /data/<%= @app %>/current/ --prune-bundler
+ExecStart=/data/<%= @app %>/current/ey_bundler_binstubs/puma -w <%= @workers %>:<%= @workers %> -e <%= @framework_env %> --bind unix:///var/run/engineyard/<%= @app %>/puma_<%= @app %>.sock --port <%= @port %> --control-url unix:///var/run/engineyard/<%= @app %>/puma_<%= @app %>-ctl.sock --state /var/run/engineyard/<%= @app %>/puma_<%= @app %>.state --dir /data/<%= @app %>/current/
 
 Restart=always
 
