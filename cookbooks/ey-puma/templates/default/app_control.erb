@@ -40,21 +40,19 @@ start() {
 }
 
 deploy() {
-  for PORT in <%= @port %>; do
     if is_running ; then
-      echo "Hot deploying Puma for ${application} on port $PORT (pid: ${current_pid}) ..."
+      echo "Hot deploying Puma for ${application}"
       cd ${current_path}
-      pumactl -S --state /var/run/engineyard/<%= @app_name %>/puma_<%= @app_name %>.state restart && echo " hot deploy in progress."
+      pumactl -S  /var/run/engineyard/<%= @app_name %>/puma_<%= @app_name %>.state restart && echo " hot deploy in progress."
     else
       start
     fi
-  done
 }
 
 stop() {
   if is_running ; then
     echo "Stopping Puma for ${application} ..."
-    systemctl stop puma_<%= @app_name %>
+    systemctl stop puma_<%= @app_name %>.socket puma_<%= @app_name %>.service
     exit 1
   else
     echo "ERROR: Doesn't seem puma is running for <%= @app_name %>"
@@ -80,11 +78,14 @@ case "$ACTION" in
   status)
     status
     ;;
-  restart)
+  hot_restart)
     deploy
     ;;
+  hard_restart)
+    restart
+    ;;
   *)
-    echo "Usage: $0 {start|stop|status|restart|deploy}"
+    echo "Usage: $0 {start|stop|status|hot_restart|hard_restart|deploy}"
     exit 1
     ;;
 esac
