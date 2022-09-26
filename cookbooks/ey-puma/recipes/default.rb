@@ -83,7 +83,7 @@ node.engineyard.apps.each_with_index do |app, index|
               workers: workers,
               threads: threads,
               port: port,
-              cloudvar: ::File.exist?("/data/#{app.name}/shared/config/env.cloud"),
+              systemctlvar: ::File.exist?("/data/#{app.name}/shared/config/env.systemctl"),
               customvar: ::File.exist?("/data/#{app.name}/shared/config/env.custom"))
     notifies :run, "execute[reload-systemd]"
   end
