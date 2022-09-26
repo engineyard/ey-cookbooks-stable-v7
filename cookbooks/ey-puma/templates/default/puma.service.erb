@@ -9,7 +9,7 @@ Type=notify
 
 EnvironmentFile=/data/<%= @app %>/shared/config/env
 
-<% if @cloudvar %>
+<% if @systemctlvar %>
 EnvironmentFile=/data/<%= @app %>/shared/config/env.systemctl
 <% end %>
 <% if @customvar %>
