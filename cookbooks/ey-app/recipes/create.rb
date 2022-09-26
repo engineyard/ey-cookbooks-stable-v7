@@ -63,7 +63,7 @@ end
 
   # the recipes are monit, nginx, and depending on the stack passenger5, puma, or unicorn
   app.recipes.each do |recipe|
-    next if recipe == "memcached"
+    next if recipe == "ey-memcached"
     # skipping node::tcp recipe run. This acts as a workaround for nodejs apps till EYPP-11098 is fixed
     next if recipe == "node::tcp"
     # This is a temp fix for puma install, so no other non ported recipes are installed, you can adjust this to match the known working recipes
