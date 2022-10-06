@@ -14,7 +14,7 @@ default['elasticsearch'].tap do |elasticsearch|
   # Elasticsearch version to install
   # Go to https://www.elastic.co/downloads/past-releases to see the available version
   # elasticsearch['version'] = '5.6.15'
-  elasticsearch['version'] = '6.6.3'
+  elasticsearch['version'] = '6.8.0'
   # elasticsearch['version'] = '7.17.2'
   # elasticsearch['version'] = '8.2.3'
   
