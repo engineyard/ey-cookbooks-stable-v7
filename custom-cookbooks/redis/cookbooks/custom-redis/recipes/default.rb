@@ -1,1 +1,1 @@
-include_recipe 'ey-redis'
+include_recipe "ey-redis"
