@@ -1,7 +1,8 @@
 default["redis"].tap do |redis|
   # Installing from APT (the default) is the recommended approach.
   # Set install_from_source to true if you need a version
-  # that's different from the one offered by Ubuntu 18.04.
+  # that's different from the one offered by Ubuntu 20.04.
+  # As per now the default version is 5.0.7-2ubuntu0.1
   redis["install_from_source"] = false
 
   # If you're installing from source, see http://download.redis.io/releases/ for the available versions
