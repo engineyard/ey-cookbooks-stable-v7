@@ -7,8 +7,8 @@ Type=simple
 WorkingDirectory=/data/<%= @app_name %>/current
 ExecStart=/bin/bash -lc "bundle exec sidekiq -e <%= @rails_env %> -C /data/<%= @app_name %>/current/config/sidekiq_<%= @count %>.yml"
 
-User=root
-Group=root
+User=<%= @user %>
+Group=<%= @user %>
 RestartSec=30
 Restart=on-failure
 

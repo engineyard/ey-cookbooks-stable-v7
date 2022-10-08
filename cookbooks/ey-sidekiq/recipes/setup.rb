@@ -21,6 +21,7 @@ if node["sidekiq"]["is_sidekiq_instance"]
         variables(
           app_name: app_name,
           count: count,
+          user: node.engineyard.environment.ssh_username,
           rails_env: node["dna"]["environment"]["framework_env"],
           memory_limit: node["sidekiq"]["worker_memory"]
         )
