@@ -3,7 +3,7 @@ apt_sources.each do |apt_source|
   apt_source = JSON.parse(apt_source)
   if apt_source != {}
     Chef::Log.info "PACKAGE REPOSITORY: Adding #{apt_source['name']}"
-    apt_repository "apt_source['name']" do
+    apt_repository apt_source["name"] do
       arch apt_source["arch"] unless apt_source["arch"].nil?
       uri apt_source["uri"] unless apt_source["uri"].nil?
       components [apt_source["components"]] unless apt_source["components"].nil?
