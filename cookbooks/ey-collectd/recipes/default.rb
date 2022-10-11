@@ -23,7 +23,8 @@ template "/engineyard/bin/ey-alert.rb" do
   })
 end
 
-package "collectd" do
+apt_package "collectd" do
+  options "--no-install-recommends"
   notifies :stop, "service[collectd]", :immediately
 end
 
