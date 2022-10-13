@@ -1,16 +1,14 @@
-cookbook_file "/tmp/logentries.key" do
-  source "logentries.key"
+# Add logentries for package repository
+# As logentries still doesn't have a release for Ubuntu 20.04, 
+# The package would be built upon releases for Ubuntu 18.04
+apt_repository "logentries" do
+  uri "http://rep.logentries.com/"
+  distribution "bionic"
+  components ["main"]
+  key "logentries.key"
+  action :add
 end
 
-execute "add logentries key" do
-  command "apt-key add /tmp/logentries.key"
-  not_if "apt-key adv --list-public-key --with-fingerprint --with-colons | grep -q A5270289C43C79AD"
-end
-
-file "/etc/apt/sources.list.d/logentries.list" do
-  content "deb http://rep.logentries.com/ bionic main"
-  notifies :run, "execute[update-apt]", :immediately
-end
-
+package "python-setproctitle"
 package "logentries"
 package "logentries-daemon"
