@@ -13,3 +13,7 @@ end
 if fetch_env_var(node, "EY_LETSENCRYPT_ENABLED") =~ /^TRUE$/i
   include_recipe "ey-letsencrypt"
 end
+
+if fetch_env_var(node, "EY_FAIL2BAN_ENABLED") =~ /^TRUE$/i
+  include_recipe "ey-fail2ban"
+end
