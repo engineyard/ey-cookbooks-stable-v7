@@ -1,5 +1,5 @@
 execute "le register --account-key" do
-  command "/usr/bin/le register --account-key #{node['le']['le_api_key']} --name #{node['dna']['applications'].keys.first}/#{node['dna']['engineyard']['this']}"
+  command "/usr/bin/le register --account-key #{node['logentries']['le_api_key']} --name #{node['dna']['applications'].keys.first}/#{node['dna']['engineyard']['this']}"
   action :run
   not_if { ::File.exist?("/etc/le/config") }
 end

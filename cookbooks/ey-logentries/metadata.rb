@@ -1,4 +1,4 @@
-name "ey-le"
+name "ey-logentries"
 description "Configuration & deployment of Logentries on Engine Yard"
 maintainer "Engine Yard"
 maintainer_email "support@engineyard.com"

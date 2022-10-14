@@ -15,5 +15,5 @@ if fetch_env_var(node, "EY_LETSENCRYPT_ENABLED") =~ /^TRUE$/i
 end
 
 unless fetch_env_var(node, "EY_LE_API_KEY").nil?
-  include_recipe "ey-le"
+  include_recipe "ey-logentries"
 end

@@ -1,1 +1,0 @@
-default["le"]["le_api_key"] = fetch_env_var(node, "EY_LE_API_KEY", "YOUR_API_KEY_HERE")
