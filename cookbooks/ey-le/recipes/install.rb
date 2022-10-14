@@ -1,5 +1,5 @@
 # Add logentries for package repository
-# As logentries still doesn't have a release for Ubuntu 20.04, 
+# As logentries still doesn't have a release for Ubuntu 20.04,
 # The package would be built upon releases for Ubuntu 18.04
 apt_repository "logentries" do
   uri "http://rep.logentries.com/"
