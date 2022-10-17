@@ -27,3 +27,11 @@ install.each do |package|
     end
   end
 end
+
+Chef::Log.info "PACKAGES: Removing xserver-xorg-core, gnome-shell and gdm3* as installed on >= stack-v7.1.0.8"
+package %w(ubuntu-gnome-desktop libgdm1 xserver-xorg-core gdm3 gnome-shell xserver-xorg-legacy gnome-session gnome) do
+  action :remove
+  options "--auto-remove"
+end
+
+Chef::Log.info "CHECK PACKAGES: #{node['packages'].keys}"
