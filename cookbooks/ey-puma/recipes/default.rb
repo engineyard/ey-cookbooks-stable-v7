@@ -50,6 +50,11 @@ node.engineyard.apps.each_with_index do |app, index|
               threads: threads)
   end
 
+  service "puma_#{app.name}.service" do
+    provider Chef::Provider::Service::Systemd
+    action :nothing
+  end
+
   managed_template "/engineyard/bin/app_#{app.name}" do
     source  "app_control.erb"
     owner   ssh_username
@@ -86,6 +91,7 @@ node.engineyard.apps.each_with_index do |app, index|
               systemctlvar: ::File.exist?("/data/#{app.name}/shared/config/env.systemctl"),
               customvar: ::File.exist?("/data/#{app.name}/shared/config/env.custom"))
     notifies :run, "execute[reload-systemd]"
+    notifies :enable, "service[puma_#{app.name}.service]", :immediately
   end
 
   managed_template "/lib/systemd/system/puma_#{app.name}.socket" do
