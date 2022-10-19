@@ -25,6 +25,8 @@ User=<%= @username %>
 
 WorkingDirectory=/data/<%= @app %>/current
 
+ExecStartPre=/usr/bin/sudo /usr/bin/chown -R <%= @username %>:<%= @username %> /run/engineyard/<%= @app %>
+
 ExecStart=/data/<%= @app %>/current/ey_bundler_binstubs/puma -w <%= @workers %>:<%= @threads %> -e <%= @framework_env %> --bind unix:///var/run/engineyard/<%= @app %>/puma_<%= @app %>.sock --port <%= @port %> --control-url unix:///var/run/engineyard/<%= @app %>/puma_<%= @app %>-ctl.sock --state /var/run/engineyard/<%= @app %>/puma_<%= @app %>.state --dir /data/<%= @app %>/current/
 
 Restart=always
