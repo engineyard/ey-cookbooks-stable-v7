@@ -1,9 +1,3 @@
-#
-# Cookbook Name:: ey-fail2ban
-# Recipe:: services
-#
-#
-
 ey_cloud_report "Fail2Ban-service" do
   message "Fail2Ban service & monitoring"
 end

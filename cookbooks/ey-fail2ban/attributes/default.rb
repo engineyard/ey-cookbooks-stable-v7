@@ -14,11 +14,17 @@ default['fail2ban']['pidfile'] = '/var/run/fail2ban/fail2ban.pid'
 is_fail2ban_enabled = !!(fetch_env_var(node, 'EY_FAIL2BAN_ENABLED', 'false') =~ /^TRUE$/i)
 # Fail2ban would be installed on to all instances of the environment 
 # unless a comma separated set of instance types is set
-# If 
 
-# Comma separate value of roles set via env variables. i.e.: solo,util,db
+# Comma separate value of roles set via env variables. i.e.: app,app_master,solo,util,db_master,db_slave
 role_pattern = fetch_env_var(node, 'EY_FAIL2BAN_INSTANCE_ROLES')
-name_pattern = fetch_env_var(node, 'EY_FAIL2BAN_INSTANCE_NAMES')
+roles = nil
+fail2ban["is_fail2ban_enabled_instance"] = false
+if role_pattern
+  roles = role_pattern.split(",")
+  fail2ban["is_fail2ban_enabled_instance"] = roles.include?(node["dna"]["instance_role"])
+
+if (fail2ban["is_fail2ban_enabled"]  && (roles == nil))
+  fail2ban["is_fail2ban_enabled_instance"] = true
 
 # jail.local
 default['fail2ban']['jails'] = {
@@ -69,26 +75,71 @@ default['fail2ban']['jails'] = {
         'maxretry'   => '3'
       }
     },
-#        'vsftpd'  => {
-#            'comment'   => 'FTP servers',
-#            'options'   => {
-#                'enabled'   => 'false',
-#                'port'      => 'ftp,ftp-data,ftps,ftps-data',
-#                'filter'    => 'vsftpd',
-#                'logpath'   => '/var/log/vsftpd.log',
-#                'maxretry'   => '6'
-#            }
-#        },
-#        'proftpd'  => {
-#            'comment'   => '',
-#            'options'   => {
-#                'enabled'   => 'false',
-#                'port'      => 'ftp,ftp-data,ftps,ftps-data',
-#                'filter'    => 'proftpd',
-#                'logpath'   => '/var/log/proftpd/proftpd.log',
-#                'maxretry'   => '6'
-#            }
-#        },
+    'postfix'  => {
+        'comment'   => 'Mail servers',
+        'options'   => {
+            'enabled'   => 'false',
+            'port'      => 'smtp,ssmtp',
+            'filter'    => 'postfix',
+            'logpath'   => '/var/log/mail.log'
+        }
+    },
+    'sasl'  => {
+        'comment'   => '',
+        'options'   => {
+            'enabled'   => 'false',
+            'port'      => 'smtp,ssmtp,imap2,imap3,imaps,pop3,pop3s',
+            'filter'    => 'sasl',
+            'logpath'   => '/var/log/mail.log'
+        }
+    },
+    'exim-iptables'  => {
+        'comment'   => 'ban ips listed in a dns realtime-blacklist',
+        'options'   => {
+            'enabled'   => 'false',
+            'port'      => 'smtp,2525,465',
+            'filter'    => 'exim',
+            #'action' => 'iptables-multiport[name=Exim, port="smtp,2525,465", protocol=tcp]'
+            'logpath'   => '/var/log/exim4/mainlog',
+            'maxretry'  => '2',
+    # ban almost 6h
+            'bantime'   => '20000'
+        }
+    },
+    'ssh-repeater'  => {
+        'comment'   => 'see http://stuffphilwrites.com/2013/03/permanently-ban-repeat-offenders-fail2ban/',
+        'options'   => {
+            'enabled'   => 'false',
+            'filter'    => 'sshd',
+            'logpath'   => '/var/log/auth.log',
+            'maxretry'  => '15',
+            'fintime'   => 31536000,
+            'bantime'   => 31536000,
+            'action'    => 'iptables-repeater[name=ssh-repeat]
+                                      %(mailaction)s'
+        }
+    },
+    'repeatoffender'  => {
+        'comment'   => 'see http://tscadfx.com/permanently-ban-repeat-offenders-with-fail2ban/',
+        'options'   => {
+            'enabled'   => 'false',
+            'filter'    => 'repeatoffender',
+            'logpath'   => '/var/log/fail2ban.log',
+            'maxretry'  => '15',
+            'bantime'   => '-1',
+            'findtime'  => 31536000,
+            'action'    => 'repeatoffender[name=repeatoffender]
+                                %(mailaction)s'
+        }
+    }
+  }
+
+
+}
+
+# Add nginx jails only if it's an application or a util instance
+if node["dna"]["instance_role"] == "app" || node["dna"]["instance_role"] == "app_master":
+  nginx_confs = {
     'nginx-auth'  => {
       'comment'   => 'nginx basic auth',
       'options'   => {
@@ -160,63 +211,8 @@ default['fail2ban']['jails'] = {
         'findtime'  => 60,
         'bantime'   => 172800
       }
-    },
-        'postfix'  => {
-            'comment'   => 'Mail servers',
-            'options'   => {
-                'enabled'   => 'false',
-                'port'      => 'smtp,ssmtp',
-                'filter'    => 'postfix',
-                'logpath'   => '/var/log/mail.log'
-            }
-        },
-        'sasl'  => {
-            'comment'   => '',
-            'options'   => {
-                'enabled'   => 'false',
-                'port'      => 'smtp,ssmtp,imap2,imap3,imaps,pop3,pop3s',
-                'filter'    => 'sasl',
-                'logpath'   => '/var/log/mail.log'
-            }
-        },
-        'exim-iptables'  => {
-            'comment'   => 'ban ips listed in a dns realtime-blacklist',
-            'options'   => {
-                'enabled'   => 'false',
-                'port'      => 'smtp,2525,465',
-                'filter'    => 'exim',
-                #'action' => 'iptables-multiport[name=Exim, port="smtp,2525,465", protocol=tcp]'
-                'logpath'   => '/var/log/exim4/mainlog',
-                'maxretry'  => '2',
-        # ban almost 6h
-                'bantime'   => '20000'
-            }
-        },
-        'ssh-repeater'  => {
-            'comment'   => 'see http://stuffphilwrites.com/2013/03/permanently-ban-repeat-offenders-fail2ban/',
-            'options'   => {
-                'enabled'   => 'false',
-                'filter'    => 'sshd',
-                'logpath'   => '/var/log/auth.log',
-                'maxretry'  => '15',
-                'fintime'   => 31536000,
-                'bantime'   => 31536000,
-                'action'    => 'iptables-repeater[name=ssh-repeat]
-                                         %(mailaction)s'
-            }
-        },
-        'repeatoffender'  => {
-            'comment'   => 'see http://tscadfx.com/permanently-ban-repeat-offenders-with-fail2ban/',
-            'options'   => {
-                'enabled'   => 'false',
-                'filter'    => 'repeatoffender',
-                'logpath'   => '/var/log/fail2ban.log',
-                'maxretry'  => '15',
-                'bantime'   => '-1',
-                'findtime'  => 31536000,
-                'action'    => 'repeatoffender[name=repeatoffender]
-                                   %(mailaction)s'
-            }
-        }
+    }
   }
-}
+
+  default['fail2ban']['jails'].deep_merge(nginx_confs)
+end

@@ -1,9 +1,3 @@
-#
-# Cookbook Name:: ey-fail2ban
-# Recipe:: jails
-#
-#
-
 # We're going to need net/http to initiate an HTTP request to AWS.
 require 'net/http'
 

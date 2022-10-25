@@ -1,10 +1,3 @@
-#
-# Cookbook Name:: ey-fail2ban
-# Recipe:: default
-#
-#
-# install package
-
 ey_cloud_report "Fail2Ban" do
   message "Installing Fail2Ban"
 end
@@ -31,6 +24,5 @@ if node['fail2ban']['is_fail2ban_instance']
   end
 
   include_recipe "fail2ban::service"
-
   include_recipe "fail2ban::jails"
 end
