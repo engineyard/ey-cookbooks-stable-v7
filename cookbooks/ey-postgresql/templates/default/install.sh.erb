@@ -15,7 +15,7 @@ if [[ -z "$PKG_VER" ]]; then
   exit 1
 fi
 echo "Installing <%= package %>"
-DEBIAN_FRONTEND=noninteractive apt install -y --allow-downgrades <%= package %>="$PKG_VER"
+DEBIAN_FRONTEND=noninteractive apt install -y --allow-downgrades --no-install-recommends <%= package %>="$PKG_VER"
 <% if package == "postgresql-#{@postgres_version}" %>
 if [[ ! -n $(systemctl status postgresql | grep "Loaded.*/etc/systemd/system/postgresql.service") ]]; then
   systemctl stop postgresql && rm -f /lib/systemd/system/postgresql.service
