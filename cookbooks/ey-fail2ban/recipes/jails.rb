@@ -8,7 +8,7 @@ end
 public_ip = Net::HTTP.get(URI('http://169.254.169.254/latest/meta-data/public-ipv4'))
 
 def pushFile(fileList, type)
-	refPath = "#{Chef::Config['file_cache_path']}cookbooks/fail2ban/files"
+	refPath = "#{Chef::Config['file_cache_path']}/cookbooks/ey-fail2ban/files"
 	files = fileList.select {|w| w[/#{type}\.d/]}
 	files.each do |filepath|
 		filename = filepath.match(/#{refPath}\/.*\/#{type}\.d\/(.*)/)
@@ -49,8 +49,7 @@ end
 #files = run_context.cookbook_collection[ cookbook_name ].template_filenames
 #pushFileTemplates(files, 'filter')
 #pushFileTemplates(files, 'action')
-
-files = run_context.cookbook_collection[ cookbook_name ].file_filenames
+files = run_context.cookbook_collection[ cookbook_name ].all_files
 pushFile(files, 'filter')
 pushFile(files, 'action')
 

@@ -18,13 +18,15 @@ is_fail2ban_enabled = !!(fetch_env_var(node, 'EY_FAIL2BAN_ENABLED', 'false') =~ 
 # Comma separate value of roles set via env variables. i.e.: app,app_master,solo,util,db_master,db_slave
 role_pattern = fetch_env_var(node, 'EY_FAIL2BAN_INSTANCE_ROLES')
 roles = nil
-fail2ban["is_fail2ban_enabled_instance"] = false
+default["fail2ban"]["is_fail2ban_enabled_instance"] = false
 if role_pattern
   roles = role_pattern.split(",")
-  fail2ban["is_fail2ban_enabled_instance"] = roles.include?(node["dna"]["instance_role"])
+  default["fail2ban"]["is_fail2ban_enabled_instance"] = roles.include?(node["dna"]["instance_role"])
+end
 
-if (fail2ban["is_fail2ban_enabled"]  && (roles == nil))
-  fail2ban["is_fail2ban_enabled_instance"] = true
+if (default["fail2ban"]["is_fail2ban_enabled"]  && (roles == nil))
+  default["fail2ban"]["is_fail2ban_enabled_instance"] = true
+end
 
 # jail.local
 default['fail2ban']['jails'] = {
@@ -138,7 +140,7 @@ default['fail2ban']['jails'] = {
 }
 
 # Add nginx jails only if it's an application or a util instance
-if node["dna"]["instance_role"] == "app" || node["dna"]["instance_role"] == "app_master":
+if node["dna"]["instance_role"] == "app" || node["dna"]["instance_role"] == "app_master"
   nginx_confs = {
     'nginx-auth'  => {
       'comment'   => 'nginx basic auth',

@@ -5,7 +5,7 @@ end
 # Install Fail2ban on all instances
 # Install Fail2ban only on selected instances
 
-if node['fail2ban']['is_fail2ban_instance']
+if node['fail2ban']['is_fail2ban_enabled_instance']
   package 'fail2ban' do
     action :install
   end
@@ -23,6 +23,6 @@ if node['fail2ban']['is_fail2ban_instance']
     })
   end
 
-  include_recipe "fail2ban::service"
-  include_recipe "fail2ban::jails"
+  include_recipe "ey-fail2ban::service"
+  include_recipe "ey-fail2ban::jails"
 end
