@@ -47,23 +47,23 @@ if node["custom_crons"]
   crons = all_crons + named_crons
 
   if node["dna"]["instance_role"] == "util"
-    crons = crons + util_crons
+    crons += util_crons
   end
 
   if node["dna"]["instance_role"] == "app_master"
-    crons = crons + app_master_crons
+    crons += app_master_crons
   end
 
   if node["dna"]["instance_role"] == "solo"
-    crons = crons + solo_crons
+    crons += solo_crons
   end
 
   if node["dna"]["instance_role"] == "app" || node["dna"]["instance_role"] == "app_master"
-    crons = crons + app_crons
+    crons += app_crons
   end
 
   if node["dna"]["instance_role"] == "db_master" || node["dna"]["instance_role"] == "db_slave"
-    crons = crons + db_crons
+    crons += db_crons
   end
 else
   crons = []
