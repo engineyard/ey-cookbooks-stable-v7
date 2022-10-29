@@ -44,19 +44,19 @@ default["redis"].tap do |redis|
   redis["instance_role"] = fetch_env_var(node, "EY_REDIS_INSTANCE_ROLE", "util")
 
   if redis["instance_role"] == "solo"
-    redis['is_redis_instance'] = (node['dna']['instance_role'] == 'solo')
+    redis["is_redis_instance"] = (node["dna"]["instance_role"] == "solo")
   end
 
   if redis["instance_role"] == "app_master"
-    redis['is_redis_instance'] = (node['dna']['instance_role'] == 'app_master')
+    redis["is_redis_instance"] = (node["dna"]["instance_role"] == "app_master")
   end
 
   if redis["instance_role"] == "app"
-    redis['is_redis_instance'] = (node['dna']['instance_role'] == 'app')
+    redis["is_redis_instance"] = (node["dna"]["instance_role"] == "app")
   end
 
   if redis["instance_role"] == "util"
-    redis['is_redis_instance'] = (node['dna']['instance_role'] == 'util') && redis_instances.include?(node["dna"]["name"])
+    redis["is_redis_instance"] = (node["dna"]["instance_role"] == "util") && redis_instances.include?(node["dna"]["name"])
   end
 
   # Log level options:
