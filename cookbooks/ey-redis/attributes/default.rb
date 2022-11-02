@@ -51,10 +51,6 @@ default["redis"].tap do |redis|
     redis["is_redis_instance"] = (node["dna"]["instance_role"] == "app_master")
   end
 
-  if redis["instance_role"] == "app"
-    redis["is_redis_instance"] = (node["dna"]["instance_role"] == "app")
-  end
-
   if redis["instance_role"] == "util"
     redis["is_redis_instance"] = (node["dna"]["instance_role"] == "util") && redis_instances.include?(node["dna"]["name"])
   end
