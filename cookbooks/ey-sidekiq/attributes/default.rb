@@ -6,7 +6,7 @@ default["sidekiq"].tap do |sidekiq|
   # We use regex so it could be installed on all app instances using app for example
 
   does_role_match = Regexp.new(fetch_env_var(node, "EY_SIDEKIQ_INSTANCES_ROLE", "util")).match(node["dna"]["instance_role"]) ? true : false
-  does_name_match = Regexp.new(fetch_env_var(node, "EY_SIDEKIQ_INSTANCES_NAME", "")).match(node["dna"]["name"]) ? true : false
+  does_name_match = Regexp.new(fetch_env_var(node, "EY_SIDEKIQ_INSTANCES_NAME", "")).match(node["dna"]["name"].to_s) ? true : false
   not_database = !(node["dna"]["instance_role"] =~ /^db_/)
 
   sidekiq["is_sidekiq_instance"] = (is_sidekiq_enabled && does_role_match && does_name_match && not_database)
