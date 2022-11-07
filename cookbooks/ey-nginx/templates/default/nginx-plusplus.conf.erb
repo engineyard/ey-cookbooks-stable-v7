@@ -4,6 +4,8 @@ worker_processes <%= @pool_size %>;
 worker_rlimit_nofile 10240;
 pid /var/run/nginx.pid;
 
+include /etc/nginx/modules-enabled/*.conf;
+
 events {
   worker_connections 8192;
   use epoll;
