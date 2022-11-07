@@ -1,0 +1,23 @@
+create database IF NOT EXISTS <%= @dbname %> 
+<%= case @dbencoding
+when /UTF-8/i then
+"CHARACTER SET utf8 COLLATE utf8_general_ci"
+end %>
+;
+
+CREATE TABLE IF NOT EXISTS <%= @dbname %>.<%= @locktable %> (
+  master_lock varchar(255) default NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+GRANT ALL PRIVILEGES 
+ON *.*
+TO root@'%'
+IDENTIFIED BY '<%= @dbpass %>';
+
+use <%= @dbname %>;
+insert into <%= @locktable %>  (master_lock) values('<%= "http://#{@master}/haproxy/monitor" %>');
+
+GRANT REPLICATION SLAVE 
+ON *.*
+TO 'replication'@'%' 
+IDENTIFIED BY '<%= @dbpass %>';
