@@ -15,7 +15,7 @@ chef_gem "ey_cloud_server" do
 end
 
 chef_gem "ey_services_setup" do
-  version "0.0.7"
+  version "0.0.8"
   compile_time false
 end
 

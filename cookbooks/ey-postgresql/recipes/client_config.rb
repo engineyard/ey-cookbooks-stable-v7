@@ -9,8 +9,8 @@ template "/root/.pgpass" do
   })
 end
 
-execute "touch ~/.bash_login" do
-  action :run
+file '/root/.bash_login' do
+  action :create_if_missing
 end
 
 file "add_PGUSER_to_root_bash_login" do

@@ -16,4 +16,7 @@ end
 
 if fetch_env_var(node, "EY_FAIL2BAN_ENABLED") =~ /^TRUE$/i
   include_recipe "ey-fail2ban"
+
+unless fetch_env_var(node, "EY_LOGENTRIES_API_KEY").nil?
+  include_recipe "ey-logentries"
 end

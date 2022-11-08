@@ -3,7 +3,7 @@ apt_sources.each do |apt_source|
   apt_source = JSON.parse(apt_source)
   if apt_source != {}
     Chef::Log.info "PACKAGE REPOSITORY: Adding #{apt_source['name']}"
-    apt_repository "apt_source['name']" do
+    apt_repository apt_source["name"] do
       arch apt_source["arch"] unless apt_source["arch"].nil?
       uri apt_source["uri"] unless apt_source["uri"].nil?
       components [apt_source["components"]] unless apt_source["components"].nil?
@@ -27,3 +27,11 @@ install.each do |package|
     end
   end
 end
+
+Chef::Log.info "PACKAGES: Removing xserver-xorg-core, gnome-shell and gdm3* as installed on >= stack-v7.1.0.8"
+package %w(ubuntu-gnome-desktop libgdm1 xserver-xorg-core gdm3 gnome-shell xserver-xorg-legacy gnome-session gnome) do
+  action :remove
+  options "--auto-remove"
+end
+
+Chef::Log.info "CHECK PACKAGES: #{node['packages'].keys}"
