@@ -29,7 +29,7 @@ if (default["fail2ban"]["is_fail2ban_enabled"]  && (roles == nil))
 end
 
 # jail.local
-default['fail2ban']['jails'] = {
+jails = Hash[
   # defined using space separator.
   'ignoreip'    => '127.0.0.1/8',
   # "bantime" is the number of seconds that a host is banned.
@@ -135,13 +135,11 @@ default['fail2ban']['jails'] = {
         }
     }
   }
+]
 
-
-}
-
-# Add nginx jails only if it's an application or a util instance
-if node["dna"]["instance_role"] == "app" || node["dna"]["instance_role"] == "app_master"
-  nginx_confs = {
+# Add nginx jails only if it's an application or a solo instance
+if ["app_master", "app", "solo"].include?(node["dna"]["instance_role"])
+  jails["jails"].merge!( {
     'nginx-auth'  => {
       'comment'   => 'nginx basic auth',
       'options'   => {
@@ -214,7 +212,7 @@ if node["dna"]["instance_role"] == "app" || node["dna"]["instance_role"] == "app
         'bantime'   => 172800
       }
     }
-  }
-
-  default['fail2ban']['jails'].deep_merge(nginx_confs)
+  })
 end
+
+default['fail2ban']['jails'] = jails

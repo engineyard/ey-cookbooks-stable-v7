@@ -2,6 +2,17 @@
 
 This recipe is used to run fail2ban on the stable-v7 stack.
 
-The fail2ban recipe is managed by Engine Yard. You should not copy this recipe to your repository but instead copy custom-fail2ban. Please check the [custom-fail2ban readme](../../custom-cookbooks/fail2ban/cookbooks/custom-fail2ban) for the complete instructions.
-
 We accept contributions for changes that can be used by all customers.
+
+In order to enable the recipe, consider setting `EY_FAIL2BAN_ENABLED` to `true`
+
+In order to specify on which instances it should run.
+
+```
+EY_FAIL2BAN_ENABLED_INSTANCES
+```
+
+set the role values as comma separated values.
+
+i.e: solo,util
+db_master,app,util
