@@ -7,7 +7,7 @@ directory $quarantine_directory do
 end
 
 cron "update clamav knowledgebase" do
-  time :weekly
+  time :daily
   command "systemctl stop clamav-daemon && freshclam && systemctl start clamav-daemon"
   user "root"
 end
