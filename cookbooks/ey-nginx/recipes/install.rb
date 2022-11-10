@@ -18,7 +18,7 @@ directory "/var/log/engineyard/nginx" do
   mode "0755"
 end
 
-["/data/nginx/servers", "/data/nginx/common"].each do |dir|
+["/data/nginx/servers", "/data/nginx/common", "/data/nginx/modules-available", "/data/nginx/modules-enabled"].each do |dir|
   directory dir do
     owner node["owner_name"]
     group node["owner_name"]
