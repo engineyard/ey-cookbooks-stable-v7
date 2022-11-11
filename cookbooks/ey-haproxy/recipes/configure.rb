@@ -1,4 +1,5 @@
-service "nginx" do
+service "force-restart-nginx" do
+  service_name "nginx"
   action :restart
   only_if "lsof -n -i :80 -i :443 | grep LISTEN | grep nginx"
 end
