@@ -18,21 +18,21 @@ Configure
 1) Configure the following attributes in the dr_replication cookbook:
 
 ```
-default[:dr_replication] = {
-  :<framework_env> => {
-    :master => {
-      :public_hostname => "" # The public hostname of the master database
+default['dr_replication'] = {
+  <framework_env>: {
+    master: {
+      public_hostname: "" # The public hostname of the master database
     },
-    :initiate => {
-      :public_hostname => "" # MySQL ONLY - The public hostname of the database you want to sync the data from (can be the slave or master)
+    initiate: {
+      public_hostname: "" # MySQL ONLY - The public hostname of the database you want to sync the data from (can be the slave or master)
     },
-    :slave => {
-      :public_hostname => "" # The public hostname of the disaster recovery database
+    slave: {
+      public_hostname: "" # The public hostname of the disaster recovery database
     }
   }
 
-  default[:establish_replication] = false # Set to true to establish replication during Chef run
-  default[:failover] = false # Set to true to failover to D/R environment during Chef run
+  default['establish_replication'] = false # Set to true to establish replication during Chef run
+  default['failover'] = false # Set to true to failover to D/R environment during Chef run
 ```
 
 2) Upload and apply Chef cookbooks:
@@ -47,8 +47,8 @@ Steps to Failover
 1) Set the failover attribute to true and establish_replication to false:
 
 ```
-default[:establish_replication] = false
-default[:failover] = true
+default['establish_replication'] = false
+default['failover'] = true
 ```
 
 2) Upload and apply

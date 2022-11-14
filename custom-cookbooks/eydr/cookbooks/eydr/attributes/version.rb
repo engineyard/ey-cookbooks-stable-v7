@@ -1,4 +1,4 @@
-case node.engineyard.environment['db_stack_name']
+case node['dna']['engineyard']['environment']['db_stack_name']
 when 'mysql5_7'
   default['mysql']['latest_version'] = '5.7.37'
   default['mysql']['virtual'] = '5.7'
@@ -20,9 +20,5 @@ when 'postgres9_6'
 when 'postgres10'
   default['postgresql']['latest_version'] = '10.20'
   default['postgresql']['short_version'] = '10'
-  default['postgresql']['datadir'] = "/db/postgresql/#{node['postgresql']['short_version']}/data/"
-when 'postgres11'
-  default['postgresql']['latest_version'] = '11.16'
-  default['postgresql']['short_version'] = '11'
   default['postgresql']['datadir'] = "/db/postgresql/#{node['postgresql']['short_version']}/data/"
 end

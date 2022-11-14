@@ -1,6 +1,20 @@
-#!/sbin/runscript
+#!/bin/sh
 
-PIDFILE=/var/run/${SVCNAME}.pid
+### BEGIN INIT INFO
+# Provides:          ssh_tunnel
+# Required-Start:  $network $remote_fs $syslog
+# Required-Stop:   $network $remote_fs $syslog
+# Default-Start:   2 3 4 5
+# Default-Stop:
+# Description:     Persistent SSH Tunnel to from port 5433 on this server to port 5432 on external server
+### END INIT INFO
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+. /lib/lsb/init-functions
+
+BASENAME=ssh_tunnel
+PIDFILE=/var/run/${BASENAME}.pid
+CMD=/usr/bin/ssh
 
 # connection params
 SSH_HOST='<%= @ssh_hostname %>'
@@ -20,60 +34,56 @@ FORWARD_PORT=<%= @forward_port %>               # mysql port
 # DUAL -> Bi-directional, useful for binary log purge scripts
 DIRECTION="<%= @tunnel_direction %>"
 
-CMD="<%= @ssh_cmd %>"
+case "$1" in
+start)
+        log_daemon_msg "Starting ssh_tunnel" "$BASENAME"
+        FORWARD_TYPE="-L"
+        if [ "$DIRECTION" = "REV" ]
+        then
+          FORWARD_TYPE="-R"
+        elif [ "$DIRECTION" = "DUAL" ]
+            then
+          FORWARD_TYPE="-R $CONNECT_PORT:$FORWARD_HOST:$FORWARD_PORT -L"
+        fi
 
-depend() {
-    use net
-}
- 
-start() {
-    ebegin "Starting ssh tunnel"
-    
-    FORWARD_TYPE="-L"
-    if [ "$DIRECTION" = "REV" ]
-    then
-      FORWARD_TYPE="-R"
-    elif [ "$DIRECTION" = "DUAL" ]
-	then
-      FORWARD_TYPE="-R ${CONNECT_PORT}:${FORWARD_HOST}:${FORWARD_PORT} -L" 
-    fi
-    
-    ARGS="-f -p ${SSH_PORT} -N $FORWARD_TYPE ${CONNECT_PORT}:${FORWARD_HOST}:${FORWARD_PORT} ${SSH_USER}@${SSH_HOST}"
-    
-    if [ -n "$SSH_KEY" ]
-    then
-        ARGS="-i ${SSH_KEY} ${ARGS}"
-    fi
-    
-    if [ -n "$SSH_KNOWN_HOSTS" ]
-    then
-        ARGS="-o UserKnownHostsFile=${SSH_KNOWN_HOSTS} ${ARGS}"
-    else
-        ARGS="-o StrictHostKeyChecking=no ${ARGS}"
-    fi
-    
-    start-stop-daemon --start --pidfile ${PIDFILE} --exec ${CMD} -- ${ARGS}
-    pid="$(ps aux | grep "[s]sh.*${ARGS}" | awk '{print $2}')";
-    echo $pid > ${PIDFILE}
-    
-    eend $? "Failed to start ssh tunnel"
-} 
+        ARGS="-f -p $SSH_PORT -N $FORWARD_TYPE $CONNECT_PORT:$FORWARD_HOST:$FORWARD_PORT $SSH_USER@$SSH_HOST"
 
-stop() {
-    ebegin "Stopping ssh tunnel"
-    
-    start-stop-daemon --stop -o --pidfile ${PIDFILE}
-    rm ${PIDFILE}
-    
-    eend $? "Failed to stop ssh tunnel"
-}
+        if [ -n "$SSH_KEY" ]
+        then
+            ARGS="-i $SSH_KEY $ARGS"
+        fi
 
-restart() {
-    ebegin "Restarting ssh tunnel"
-    
-    svc_stop
-    svc_start
-    
-    eend $? "Failed to restart ssh tunnel"
-}
+        if [ -n "$SSH_KNOWN_HOSTS" ]
+        then
+            ARGS="-o UserKnownHostsFile=$SSH_KNOWN_HOSTS $ARGS"
+        else
+            ARGS="-o StrictHostKeyChecking=no $ARGS"
+        fi
 
+        start-stop-daemon --quiet --oknodo --start --pidfile $PIDFILE --exec $CMD -- $ARGS || return 2
+        pid="$(ps aux | grep "[s]sh.*$ARGS" | awk '{print $2}')";
+        echo $pid > $PIDFILE
+
+        log_end_msg $?
+        ;;
+stop)
+        log_daemon_msg "Stopping ssh tunnel" "$BASENAME"
+
+        start-stop-daemon --stop -o --pidfile $PIDFILE
+
+        log_end_msg $?
+
+        rm $PIDFILE
+        ;;
+restart)
+        log_daemon_msg "Restarting ssh tunnel" "$BASENAME"
+
+        $0 stop && sleep 2 && $0 start
+
+        log_end_msg $?
+        ;;
+*)
+        echo "Usage: $0 {start|stop|reload|restart|status}"
+        exit 2
+        ;;
+esac
