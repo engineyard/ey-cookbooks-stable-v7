@@ -1,6 +1,6 @@
-service "reload-nginx" do
+service "nginx-restart" do
   service_name "nginx"
-  action :reload
+  action :restart
   only_if "lsof -n -i :80 -i :443 | grep LISTEN | grep nginx"
 end
 
