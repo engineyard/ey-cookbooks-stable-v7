@@ -3,6 +3,8 @@ postgresql
 
 A chef recipe for managing the installed version of PostgreSQL server and client tools on EngineYard AppCloud. This recipe uses installs from the internal Engine Yard Portage tree (Gentoo). Includes support for installing PostgreSQL client tools for working with RDS PostgreSQL.
 
+NOTE: Whenever a new version is release, this is one of the sites/services used to analyze the changes and update the recipes.
+
 dependencies
 ============
 
