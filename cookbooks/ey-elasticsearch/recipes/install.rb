@@ -11,13 +11,13 @@ if ES["is_elasticsearch_instance"]
   directory ES["home"] do
     owner "elasticsearch"
     group "elasticsearch"
-    mode 0755
+    mode "755"
   end
 
   directory "/data/elasticsearch-#{ES['version']}/data" do
     owner "elasticsearch"
     group "elasticsearch"
-    mode 0755
+    mode "755"
     action :create
     recursive true
   end
@@ -59,7 +59,7 @@ if ES["is_elasticsearch_instance"]
   directory "/etc/systemd/system/elasticsearch.service.d" do
     owner "root"
     group "root"
-    mode 0755
+    mode "755"
     recursive true
     action :create
   end
@@ -89,7 +89,7 @@ if ["solo", "app_master", "app", "util"].include?(node["dna"]["instance_role"])
     template "/data/#{app_name}/shared/config/elasticsearch.yml" do
       owner owner_name
       group owner_name
-      mode 0660
+      mode "660"
       source "es.yml.erb"
       backup 0
       variables(yaml_file: {

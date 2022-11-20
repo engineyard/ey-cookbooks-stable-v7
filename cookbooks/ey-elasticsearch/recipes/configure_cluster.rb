@@ -26,7 +26,7 @@ else
       elasticsearch_clustername: ES["clustername"],
       elasticsearch_host: node["fqdn"]
     )
-    mode 0600
+    mode "600"
     backup 0
   end
 end

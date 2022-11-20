@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: elasticsearch
+# Cookbook:: elasticsearch
 # Recipe:: default
 #
 # Credit goes to GoTime for their original recipe ( http://cookbooks.opscode.com/cookbooks/elasticsearch )
