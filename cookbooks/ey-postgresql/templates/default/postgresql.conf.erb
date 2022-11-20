@@ -194,7 +194,7 @@ max_wal_senders = 5		# max number of walsender processes
 
 # as per chnage in postgres version 13 `wal_keep_segments` is renamed to `wal_keep_size` https://pgpedia.info/w/wal_keep_segments.html
 <% if @postgres_version >= "13.0" %>
-wal_keep_size = 128 # in logfile segments, 16MB each; 0 disables 
+wal_keep_size = 2048 # in logfile segments, 16MB each; 0 disables 
 <% else %>
 wal_keep_segments = 128 		# in logfile segments, 16MB each; 0 disables
 <% end %>
