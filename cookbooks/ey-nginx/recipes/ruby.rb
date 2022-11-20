@@ -1,6 +1,8 @@
 is_app_master = ["app_master", "solo"].include?(node["dna"]["instance_role"]) || false
 
-ports = node["passenger5"]["port"].to_i
+base_port = node["passenger5"]["port"].to_i
+stepping = 200
+ports = base_port
 
 # Temp
 
@@ -11,6 +13,8 @@ if node.stack.match(/pumalegacy/)
 end
 
 node.engineyard.apps.each_with_index do |app, index|
+  ports = base_port + (stepping * index)
+
   if node.stack.match(/pumalegacy/)
     app_base_port = base_port + (stepping * index)
     workers = [(1.0 * get_pool_size() / node["dna"]["applications"].size).round, 1].max
