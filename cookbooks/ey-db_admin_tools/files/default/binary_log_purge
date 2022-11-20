@@ -4,8 +4,8 @@
 # Author: Tyler Poland
 # Version: 0.2
 # Purpose: Script to check current state of all replica databases and
-# 	purge binary logs from the master based on the position of any
-# 	and all replica databases.
+#       purge binary logs from the master based on the position of any
+#       and all replica databases.
 
 # Changelog 0.1 -> 0.2
 # - modified binlog check routine to lookup binary log storage in configuration file instead of relying on
@@ -61,7 +61,7 @@ if defined?(Encoding)
   Encoding.default_external = Encoding::UTF_8
   Encoding.default_internal = Encoding::UTF_8
 else
-  $KCODE = "UTF8" # Add basic utf-8 encoding support
+  $KCODE = "UTF8"
 end
 
 require "rubygems"
@@ -158,7 +158,7 @@ EOF
   begin Net::SMTP.start("mail") do |smtp|
     smtp.sendmail(mailtext, "root@" + hostname, recipients)
   end
-  rescue => e
+  rescue StandardError => e
     log_error "Exception occurred: " + e
   end
   exit(1)
@@ -166,7 +166,7 @@ end
 
 # function to retrieve password from .mytop file
 def get_password
-  dbpass = %x(`cat /root/.mytop |grep pass |awk -F= '{print $2}'`).chomp
+  dbpass = `cat /root/.mytop |grep pass |awk -F= '{print $2}'`.chomp
   failure_message() if dbpass.empty?
   dbpass
 end
@@ -183,7 +183,7 @@ def run_query(host, user, password, query)
     stdin, stdout, stderr = Open3.popen3("mysql -u#{user} #{options} -h#{host} -e\"#{query}\"")
   end
   query_error = stderr.read
-  if query_error.!empty?
+  if query_error.length > 0
     if query_error.match(/.*MySQL.*127.0.0.1.*/)
       stdin.close
       stdout.close
@@ -204,12 +204,12 @@ end
 
 # function to test for user privilege
 def test_add_privilege(user, password, error)
-  full_hostname = %x(`hostname --long`).chomp
-  dns_name = %x(`hostname -d`).chomp
+  full_hostname = `hostname --long`.chomp
+  dns_name = `hostname -d`.chomp
   # verify that this is the user privilege error with the root user not having access to the replica
   if error.match(/ERROR 1045.* Access denied for user 'root'@'.*#{dns_name}' \(using password: YES\)/)
     # check the master to see if grant based on hostname or IP exists
-    master_ip = %x(`hostname -i`).chomp.gsub(/\s+/, "")
+    master_ip = `hostname -i`.chomp.gsub(/\s+/, "")
     _stdin, _stdout, stderr = Open3.popen3("mysql -u#{user} -e\"show grants for 'root'@'#{master_ip}'\"")
     master_ip_error = stderr.read
     _stdin, _stdout, stderr = Open3.popen3("mysql -u#{user} -e\"show grants for 'root'@'#{full_hostname}'\"")
@@ -235,7 +235,7 @@ end
 # function to convert input into yaml
 def yaml_result(file)
   parse = file.gsub(/^\*.*$/, "").gsub(/^/, " ").gsub(/^\s+/, "  ")
-  yml = YAML.load(parse)
+  _yml = YAML.load(parse)
 end
 
 # parse the hostname out of the processlist
@@ -245,7 +245,7 @@ def extract_host(line)
 end
 
 def volume_space(volume = "/db")
-  %x(`df | grep '#{volume}'`).split
+  `df | grep '#{volume}'`.split
 end
 
 # function to get replica position from replica host
@@ -266,8 +266,8 @@ def slave_log_file(hostname, user, pass)
 end
 
 def get_mysql_run_options
-  mysql_process = %x(`/usr/sbin/mysqld --print-defaults`).split(/\s+/).select { |item| item.match(/^--/) }
-  params = Hash.new(0)
+  mysql_process = `/usr/sbin/mysqld --print-defaults`.split(/\s+/).select { |item| item.match(/^--/) }
+  params = {}
   mysql_process.each { |i| k, v = i.split("="); params[k] = v }
   params
 end
@@ -313,7 +313,7 @@ slave_hosts = []
 min_log = 0
 result.each_line do |line|
   if line.include? "Binlog Dump"
-    slave = Hash.new(0)
+    slave = {}
     slave["hostname"] = extract_host(line)
     # If the slave is inaccessible this next line times out. This can happen if a slave is terminated without stopping replication first
     # the error is caught as "Error caught: ERROR 2003 (HY000): Can't connect to MySQL server on"
@@ -334,8 +334,8 @@ stop_log = min_log - keep_logs
 # if standalone master and no replicas are found we stop purge #{keep_logs} logs before master's current position
 if min_log == 0 && File.exist?(chef_file)
   chef_config = JSON.parse(File.read(chef_file))
-  if chef_config["db_slaves"].nil? || chef_config["db_slaves"].empty? || chef_config["db_slaves"].include?(%x(`hostname -f`).chomp) # chef_config['db_slaves'].grep(/%x{hostname}/)
-    current_master = %x(`cd #{binlog_dir} && ls -tr #{binary_log_name}.[0-9][0-9][0-9][0-9][0-9][0-9] | tail  -n 1`)
+  if chef_config["db_slaves"].nil? || chef_config["db_slaves"].empty? || chef_config["db_slaves"].include?(`hostname -f`.chomp) # chef_config['db_slaves'].grep(/%x{hostname}/)
+    current_master = `cd #{binlog_dir} && ls -tr #{binary_log_name}.[0-9][0-9][0-9][0-9][0-9][0-9] | tail  -n 1`
     current_master =~ /\w+.(\d{6})/ && stop_log = Regexp.last_match(1).to_i + 1 - keep_logs
   elsif min_log == 0
     log_error "Slave(s) are on record as '#{chef_config['db_slaves']}' but replication is not running."
@@ -344,8 +344,8 @@ if min_log == 0 && File.exist?(chef_file)
 end
 
 # Purge logs based on minimum position of all servers
-min_master_log = %x(`cd #{binlog_dir} && ls -tr #{binary_log_name}.[0-9][0-9][0-9][0-9][0-9][0-9] | head -n 1`)
-min_master_log =~ /\w+.(\d{6})/ and min_master_num = Regexp.last_match(1).to_i + 1
+min_master_log = `cd #{binlog_dir} && ls -tr #{binary_log_name}.[0-9][0-9][0-9][0-9][0-9][0-9] | head -n 1`
+min_master_log =~ /\w+.(\d{6})/ && min_master_num = Regexp.last_match(1).to_i + 1
 
 # purge up to 10 files as long as the top file is less than the minimum replica log
 min_master_num.upto(min_master_num + max_files_purged) do |i|
@@ -364,8 +364,9 @@ min_master_num.upto(min_master_num + max_files_purged) do |i|
     run_query("localhost", dbuser, dbpassword, "purge master logs to '#{file}'")
     sleep log_purge_sleep
   else
-    file_age = %x(`stat -c %Z #{binlog_dir}/#{file}`).chomp.to_f
-    now = %x(`date +%s`).chomp.to_f
+    file_age = `stat -c %Z #{binlog_dir}/#{file}`.chomp.to_f
+    now = `date +%s`.chomp.to_f
+
     # if the last update for the current file was longer ago than keep_binlog_hours then we can purge it
     if ((now - file_age) / 3600) > keep_binlog_hours.to_f
       log_info "Purging binary logs to #{file}"
