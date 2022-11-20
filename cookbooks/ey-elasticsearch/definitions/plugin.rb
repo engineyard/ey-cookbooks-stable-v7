@@ -1,7 +1,7 @@
-define :es_plugin, :name => nil do
-  name = params['name']
+define :es_plugin, name: nil do
+  name = params["name"]
 
-  case params['action'].to_sym
+  case params["action"].to_sym
   when :install
     Chef::Log.info "attempting to install ElasticSearch plugin #{name}"
 
