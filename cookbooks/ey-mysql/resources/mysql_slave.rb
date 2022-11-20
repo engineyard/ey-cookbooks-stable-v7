@@ -23,6 +23,7 @@ action :action_mysql_slave do
       system("umount /db")
       FileUtils.rmdir "/db"
     end
+    action :nothing
     only_if { ::File.exist?("/db") }
   end
 
