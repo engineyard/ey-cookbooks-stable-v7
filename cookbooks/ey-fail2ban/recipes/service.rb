@@ -3,7 +3,7 @@ ey_cloud_report "Fail2Ban-service" do
 end
 
 # enabling the service
-service 'fail2ban' do
-  supports [:status => true, :restart => true]
+service "fail2ban" do
+  supports [status: true, restart: true]
   action [:enable]
 end
