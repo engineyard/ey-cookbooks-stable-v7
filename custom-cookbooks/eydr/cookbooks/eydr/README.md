@@ -31,8 +31,8 @@ default['dr_replication'] = {
     }
   }
 
-  default['establish_replication'] = false # Set to true to establish replication during Chef run
-  default['failover'] = false # Set to true to failover to D/R environment during Chef run
+  default["establish_replication"] = false # Set to true to establish replication during Chef run
+  default["failover"] = false # Set to true to failover to D/R environment during Chef run
 ```
 
 2) Upload and apply Chef cookbooks:
@@ -47,8 +47,8 @@ Steps to Failover
 1) Set the failover attribute to true and establish_replication to false:
 
 ```
-default['establish_replication'] = false
-default['failover'] = true
+default["establish_replication"] = false
+default["failover"] = true
 ```
 
 2) Upload and apply
