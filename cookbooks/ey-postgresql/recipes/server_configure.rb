@@ -124,57 +124,102 @@ if ["db_slave"].include?(node["dna"]["instance_role"])
     end
   end
 
-  template "#{postgres_root}/#{postgres_version}/data/postgresql.conf" do
-    source "postgresql.conf.erb"
-    owner "postgres"
-    group "root"
-    mode "600"
-    backup 0
-    notifies :reload, "service[postgresql]"
-    variables(
-      pg_port: "5432",
-      data_directory: "/db/postgresql/#{postgres_version}/data",
-      ssl_directory: node["postgresql"]["ssldir"],
-      wal_level: "hot_standby",
-      shared_buffers: node["shared_buffers"],
-      maintenance_work_mem: node["maintenance_work_mem"],
-      work_mem: node["work_mem"],
-      max_stack_depth: "6MB", # not large enough for 8? updating limits would do it but that's the AMI and we shouldn't use ulimit -s to work around it.
-      effective_cache_size: node["effective_cache_size"],
-      default_statistics_target: node["default_statistics_target"],
-      logging_collector: node["logging_collector"],
-      log_rotation_age: node["log_rotation_age"],
-      log_rotation_size: node["log_rotation_size"],
-      checkpoint_timeout: node["checkpoint_timeout"],
-      checkpoint_segments: node["checkpoint_segments"],
-      wal_buffers: node["wal_buffers"],
-      wal_writer_delay: node["wal_writer_delay"],
-      postgres_root: postgres_root,
-      postgres_version: postgres_version,
-      hot_standby: "on",
-      archive_timeout: "0",
-      timezone: timezone
-    )
-    helpers(PostgreSQL::Helper)
-  end
+  if postgres_version >= "12"
+    template "#{postgres_root}/#{postgres_version}/data/postgresql.conf" do
+      source "postgresql12.conf.erb"
+      owner "postgres"
+      group "root"
+      mode "600"
+      backup 0
+      notifies :reload, "service[postgresql]"
+      variables(
+        pg_port: "5432",
+        data_directory: "/db/postgresql/#{postgres_version}/data",
+        ssl_directory: node["postgresql"]["ssldir"],
+        wal_level: "hot_standby",
+        shared_buffers: node["shared_buffers"],
+        maintenance_work_mem: node["maintenance_work_mem"],
+        work_mem: node["work_mem"],
+        max_stack_depth: "6MB", # not large enough for 8? updating limits would do it but that's the AMI and we shouldn't use ulimit -s to work around it.
+        effective_cache_size: node["effective_cache_size"],
+        default_statistics_target: node["default_statistics_target"],
+        logging_collector: node["logging_collector"],
+        log_rotation_age: node["log_rotation_age"],
+        log_rotation_size: node["log_rotation_size"],
+        checkpoint_timeout: node["checkpoint_timeout"],
+        checkpoint_segments: node["checkpoint_segments"],
+        wal_buffers: node["wal_buffers"],
+        wal_writer_delay: node["wal_writer_delay"],
+        postgres_root: postgres_root,
+        postgres_version: postgres_version,
+        hot_standby: "on",
+        archive_timeout: "0",
+        timezone: timezone,
+        primary_host: node["dna"]["db_host"],
+        primary_user: "postgres",
+        primary_password: node.engineyard.environment["db_admin_password"],
+        promote_trigger_file: "/tmp/postgresql.trigger",
+        conn_app_name: node.name || node.instance.id
+      )
+      helpers(PostgreSQL::Helper)
+    end
 
-  template "#{postgres_root}/#{postgres_version}/data/recovery.conf" do
-    source "recovery.conf.erb"
-    owner "postgres"
-    group "root"
-    mode "600"
-    backup 0
-    variables(
-      standby_mode: "on",
-      primary_host: node["dna"]["db_host"],
-      primary_port: 5432,
-      primary_user: "postgres",
-      primary_password: node.engineyard.environment["db_admin_password"],
-      trigger_file: "/tmp/postgresql.trigger",
-      postgres_version: postgres_version,
-      conn_app_name: node.name || node.instance.id
-    )
-    helpers(PostgreSQL::Helper)
+    execute "touch standby.signal" do
+      command "touch #{postgres_root}/#{postgres_version}/data/standby.signal"
+    end
+  else
+    template "#{postgres_root}/#{postgres_version}/data/postgresql.conf" do
+      source "postgresql.conf.erb"
+      owner "postgres"
+      group "root"
+      mode "600"
+      backup 0
+      notifies :reload, "service[postgresql]"
+      variables(
+        pg_port: "5432",
+        data_directory: "/db/postgresql/#{postgres_version}/data",
+        ssl_directory: node["postgresql"]["ssldir"],
+        wal_level: "hot_standby",
+        shared_buffers: node["shared_buffers"],
+        maintenance_work_mem: node["maintenance_work_mem"],
+        work_mem: node["work_mem"],
+        max_stack_depth: "6MB", # not large enough for 8? updating limits would do it but that's the AMI and we shouldn't use ulimit -s to work around it.
+        effective_cache_size: node["effective_cache_size"],
+        default_statistics_target: node["default_statistics_target"],
+        logging_collector: node["logging_collector"],
+        log_rotation_age: node["log_rotation_age"],
+        log_rotation_size: node["log_rotation_size"],
+        checkpoint_timeout: node["checkpoint_timeout"],
+        checkpoint_segments: node["checkpoint_segments"],
+        wal_buffers: node["wal_buffers"],
+        wal_writer_delay: node["wal_writer_delay"],
+        postgres_root: postgres_root,
+        postgres_version: postgres_version,
+        hot_standby: "on",
+        archive_timeout: "0",
+        timezone: timezone
+      )
+      helpers(PostgreSQL::Helper)
+    end
+
+    template "#{postgres_root}/#{postgres_version}/data/recovery.conf" do
+      source "recovery.conf.erb"
+      owner "postgres"
+      group "root"
+      mode "600"
+      backup 0
+      variables(
+        standby_mode: "on",
+        primary_host: node["dna"]["db_host"],
+        primary_port: 5432,
+        primary_user: "postgres",
+        primary_password: node.engineyard.environment["db_admin_password"],
+        trigger_file: "/tmp/postgresql.trigger",
+        postgres_version: postgres_version,
+        conn_app_name: node.name || node.instance.id
+      )
+      helpers(PostgreSQL::Helper)
+    end
   end
 end
 
