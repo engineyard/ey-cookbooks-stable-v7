@@ -124,7 +124,7 @@ if ["db_slave"].include?(node["dna"]["instance_role"])
     end
   end
 
-  if postgres_version >= "12"
+  if postgres_version_gte?("12")
     template "#{postgres_root}/#{postgres_version}/data/postgresql.conf" do
       source "postgresql12.conf.erb"
       owner "postgres"
