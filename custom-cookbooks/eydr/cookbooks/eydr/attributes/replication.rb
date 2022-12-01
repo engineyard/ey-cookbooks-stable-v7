@@ -20,4 +20,4 @@ default["dr_replication"] = {
 default["establish_replication"] = false
 
 # Set to true to failover to D/R environment during Chef run
-default["failover"] = false
+default['failover'] = false

@@ -3,18 +3,29 @@
 # Recipe:: postgresql_replication
 #
 
-if node["postgresql"]["short_version"] >= "12"
+postgres_version = node["postgresql"]["short_version"]
+
+if postgres_version_gte?("12")
   execute "touch standby.signal" do
     command "touch /db/postgresql/#{node['postgresql']['short_version']}/data/standby.signal"
   end
 
-  ruby_block "add replication settings" do
-    block do
-      config_line = "primary_conninfo = 'host=127.0.0.1 port=5433 user=postgres password=#{node['owner_pass']}\npromote_trigger_file = '/tmp/postgresql.trigger'"
-      file = Chef::Util::FileEdit.new("/db/postgresql/#{node['postgresql']['short_version']}/custom.conf")
-      file.insert_line_if_no_match(/#{Regexp.escape(config_line)}/, config_line)
-      file.write_file
-    end
+  bash "add primary_conninfo in postgresql.conf" do
+    user 'postgres'
+    code <<-EOS
+      cat >>/db/postgresql/#{node['postgresql']['short_version']}/data/postgresql.conf <<EOL
+primary_conninfo = 'host=127.0.0.1 port=5433 user=postgres password=#{node['owner_pass']}'
+    EOS
+    not_if "grep -q primary_conninfo /db/postgresql/#{node['postgresql']['short_version']}/data/postgresql.conf"
+  end
+
+  bash "add promote_trigger_file in postgresql.conf" do
+    user 'postgres'
+    code <<-EOS
+      cat >>/db/postgresql/#{node['postgresql']['short_version']}/data/postgresql.conf <<EOL
+promote_trigger_file = '/tmp/postgresql.trigger'
+    EOS
+    not_if "grep -q promote_trigger_file /db/postgresql/#{node['postgresql']['short_version']}/data/postgresql.conf"
   end
 else
   # Drop slave replication settings in place
@@ -44,7 +55,7 @@ directory "/db/postgresql/#{node['postgresql']['short_version']}/wal/" do
   action :create
 end
 
-if node["postgresql"]["short_version"] >= "15"
+if postgres_version_gte?("15")
   # Render the script to setup replication
   template "/engineyard/bin/setup_replication.sh" do
     source "setup_postgres_15_replication.sh.erb"
