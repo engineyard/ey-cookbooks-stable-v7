@@ -11,7 +11,7 @@ then
   #echo "Resetting collectd based on daily schedule"
   # inittab will reset automatically
   # killall -9 collectd
-  #echo "skipped daily collectd nanny process!"
+  echo "skipped daily collectd nanny process!"
 else
   #echo "Cancelling child processes running longer than 1 hour..."
   ps -eo pid,ppid,etime,cmd|grep '/usr/sbin/[c]ollectd'|awk '{print $1" "$2" "$3}' | while read -r p
