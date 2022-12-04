@@ -9,7 +9,7 @@ template "/root/.pgpass" do
   })
 end
 
-file '/root/.bash_login' do
+file "/root/.bash_login" do
   action :create_if_missing
 end
 
