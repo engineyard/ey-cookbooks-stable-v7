@@ -5,13 +5,15 @@
 
 postgres_version = node["postgresql"]["short_version"]
 
+Chef::Log.info("PostgreSQL Version: #{postgres_version}")
+
 if postgres_version_gte?("12")
   execute "touch standby.signal" do
     command "touch /db/postgresql/#{node['postgresql']['short_version']}/data/standby.signal"
   end
 
   bash "add primary_conninfo in postgresql.conf" do
-    user 'postgres'
+    user "postgres"
     code <<-EOS
       cat >>/db/postgresql/#{node['postgresql']['short_version']}/data/postgresql.conf <<EOL
 primary_conninfo = 'host=127.0.0.1 port=5433 user=postgres password=#{node['owner_pass']}'
@@ -20,7 +22,7 @@ primary_conninfo = 'host=127.0.0.1 port=5433 user=postgres password=#{node['owne
   end
 
   bash "add promote_trigger_file in postgresql.conf" do
-    user 'postgres'
+    user "postgres"
     code <<-EOS
       cat >>/db/postgresql/#{node['postgresql']['short_version']}/data/postgresql.conf <<EOL
 promote_trigger_file = '/tmp/postgresql.trigger'
