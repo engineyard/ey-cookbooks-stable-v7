@@ -1,4 +1,4 @@
-unless node.engineyard.instance.database_server?
+unless node["dna"]["instance_role"] =~ /^db_/
   instances = node["dna"]["engineyard"]["environment"]["instances"]
   redis_instance = (node["dna"]["instance_role"][/solo/] && instances.length == 1) ?
     instances[0] : instances.find { |i| i["name"] == node["redis"]["utility_name"] }

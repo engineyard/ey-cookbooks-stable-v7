@@ -37,18 +37,23 @@ default["redis"].tap do |redis|
   # redis['slave_name'] = 'redis_slave'
   # redis_instances << redis['slave_name']
 
-  # Run Redis on a named util instance
-  # This is the default
+  # Run Redis depending on environment variables
+  # By default, will install redis on a named util instance
   redis["utility_name"] = fetch_env_var(node, "EY_REDIS_INSTANCE_NAME", "redis")
   redis_instances << redis["utility_name"]
-  redis["is_redis_instance"] = (
-    node["dna"]["instance_role"] == fetch_env_var(node, "EY_REDIS_INSTANCE_ROLE", "util") &&
-    redis_instances.include?(node["dna"]["name"])
-  )
+  redis["instance_role"] = fetch_env_var(node, "EY_REDIS_INSTANCE_ROLE", "util")
 
-  # Run redis on a solo instance
-  # Not recommended for production environments
-  # redis['is_redis_instance'] = (node['dna']['instance_role'] == 'solo')
+  if redis["instance_role"] == "solo"
+    redis["is_redis_instance"] = (node["dna"]["instance_role"] == "solo")
+  end
+
+  if redis["instance_role"] == "app_master"
+    redis["is_redis_instance"] = (node["dna"]["instance_role"] == "app_master")
+  end
+
+  if redis["instance_role"] == "util"
+    redis["is_redis_instance"] = (node["dna"]["instance_role"] == "util") && redis_instances.include?(node["dna"]["name"])
+  end
 
   # Log level options:
   # - debug
