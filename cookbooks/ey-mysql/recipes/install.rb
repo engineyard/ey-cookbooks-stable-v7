@@ -95,3 +95,10 @@ packages.each do |package|
     only_if { node.engineyard.instance.arch_type == "amd64" }
   end
 end
+
+if node["mysql"]["short_version"] == "8.0"
+ execute "restart-mysql" do
+   command "/etc/init.d/mysql restart"
+  not_if { ::File.exist?('/db/mysql/#(node["mysql"]["short_version"])/mysql.ibd') }
+ end
+end 
