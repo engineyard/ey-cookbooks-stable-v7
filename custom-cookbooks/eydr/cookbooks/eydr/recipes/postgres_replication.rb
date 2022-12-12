@@ -70,6 +70,7 @@ if postgres_version_gte?("15")
       slave_public_hostname: node["dr_replication"][node["dna"]["environment"]["framework_env"]]["slave"]["public_hostname"],
       version: node["postgresql"]["short_version"]
     )
+    not_if { ::File.exist?('/engineyard/bin/setup_replication.sh') }
   end
 else
   # Render the script to setup replication
@@ -84,6 +85,7 @@ else
       slave_public_hostname: node["dr_replication"][node["dna"]["environment"]["framework_env"]]["slave"]["public_hostname"],
       version: node["postgresql"]["short_version"]
     )
+    not_if { ::File.exist?('/engineyard/bin/setup_replication.sh') }
   end
 end
 
@@ -92,5 +94,15 @@ if node["establish_replication"]
   bash "setup-replication" do
     code "/engineyard/bin/setup_replication.sh"
     timeout 7200  # default 2 hours, if you have a lot of data you may need to increase this
+    action :nothing
   end
 end
+
+if node["establish_replication"]
+  execute "check-replication" do
+    command "echo 'Replication is set to true.\nExecute setup-replication if no replication is ongoing'"
+    notifies :run, 'execute[setup-replication]', :immediately
+    not_if "psql -U postgres -c'select conninfo from pg_stat_wal_receiver;' | grep host=127.0.0.1 && psql -U postgres -c'select status from pg_stat_wal_receiver;' | grep streaming"
+  end
+end
+
