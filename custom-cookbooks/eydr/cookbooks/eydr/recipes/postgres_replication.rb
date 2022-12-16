@@ -96,13 +96,12 @@ if node["establish_replication"]
     timeout 7200  # default 2 hours, if you have a lot of data you may need to increase this
     action :nothing
   end
-end
-
-if node["establish_replication"]
-  execute "check-replication" do
-    command "echo 'Replication is set to true.\nExecute setup-replication if no replication is ongoing'"
-    notifies :run, 'execute[setup-replication]', :immediately
-    not_if "psql -U postgres -c'select conninfo from pg_stat_wal_receiver;' | grep host=127.0.0.1 && psql -U postgres -c'select status from pg_stat_wal_receiver;' | grep streaming"
-  end
+  
+  if !pg_eydr_replicating_from_master && !pg_eydr_streaming && !pg_in_recovery
+    execute "check-replication" do
+      command "echo 'Replication is set to true.\nExecute setup-replication bash if no replication is ongoing'"
+      notifies :run, 'execute[setup-replication]', :immediately
+    end
+  end 
 end
 
