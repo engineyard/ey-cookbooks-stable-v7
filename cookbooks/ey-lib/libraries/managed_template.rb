@@ -10,7 +10,7 @@ class Chef
       provides :managed_template
       def initialize(name, run_context = nil)
         super(name, run_context)
-        not_if { ::File.exist?(name.sub(/(.*)(\/)/, "\1/keep.")) }
+        not_if { ::File.exist?(name.sub(/(.*)(\/)/, "\\1\/keep.")) }
       end
     end
   end
