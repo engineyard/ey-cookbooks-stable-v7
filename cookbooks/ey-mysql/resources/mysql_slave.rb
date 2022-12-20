@@ -17,13 +17,23 @@ action :action_mysql_slave do
     command "echo"
   end
 
+ def self.mysql_slave_is_slavey?
+   begin
+     foo = `mysql -e "show slave status"`
+     !foo.empty?
+   rescue
+     false
+   end
+ end
+
   ruby_block "clean up half-done install" do
     block do
       system("/etc/init.d/mysql stop")
       system("umount /db")
       FileUtils.rmdir "/db"
     end
-    only_if { ::File.exist?("/db") }
+    action :run
+    only_if { ::File.exist?("/db") && !mysql_slave_is_slavey? }
   end
 
   directory "/db" do

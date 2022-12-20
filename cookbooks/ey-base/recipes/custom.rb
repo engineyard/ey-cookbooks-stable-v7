@@ -21,3 +21,7 @@ end
 unless fetch_env_var(node, "EY_LOGENTRIES_API_KEY").nil?
   include_recipe "ey-logentries"
 end
+
+if fetch_env_var(node, "EY_CLAMAV_ENABLED") =~ /^TRUE$/i
+  include_recipe "ey-clamav"
+end

@@ -26,4 +26,4 @@ depends "ey-reboot"
 depends "ey-memcached"
 depends "ey-fail2ban"
 depends "ey-logentries"
-
+depends "ey-clamav"

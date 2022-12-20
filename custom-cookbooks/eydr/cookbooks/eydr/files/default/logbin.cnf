@@ -1,0 +1,3 @@
+[mysqld]
+log-bin
+server-id                                       = 1

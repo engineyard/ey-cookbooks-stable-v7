@@ -1,0 +1,10 @@
+#!/bin/sh
+systemctl stop postgresql.service
+su - postgres -c "ssh -o StrictHostKeyChecking=no postgres@<%= @master_public_hostname %> 'ssh -o StrictHostKeyChecking=no postgres@<%= @slave_public_hostname %> uname'"
+rm /db/postgresql/<%= @version %>/wal/*
+psql -U postgres -h localhost -p 5433 -c"select pg_backup_start('`date`');"
+su - postgres -c "touch /db/postgresql/<%= @version %>/wal/00000001.history"
+su - postgres -c "rsync -avPz --delete --exclude .svn --exclude standby.signal --exclude recovery.conf --exclude recovery.py --exclude postgresql.conf --exclude pg_log --exclude pg_xlog <%= @master_public_hostname %>:/db/postgresql/<%= @version %>/data/ /db/postgresql/<%= @version %>/data/"
+find /db/postgresql/<%= @version %>/data/pg_xlog -type f | xargs rm -f
+psql -U postgres -h localhost -p 5433 -c"select pg_backup_stop();"
+systemctl start postgresql.service

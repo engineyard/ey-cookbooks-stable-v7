@@ -191,7 +191,13 @@ archive_timeout = <%= @archive_timeout %>		# force a logfile segment switch afte
 
 max_wal_senders = 5		# max number of walsender processes
 #wal_sender_delay = 200ms	# walsender cycle time, 1-10000 milliseconds
+
+# as per chnage in postgres version 13 `wal_keep_segments` is renamed to `wal_keep_size` https://pgpedia.info/w/wal_keep_segments.html
+<% if postgres_version_gte?("13") %>
+wal_keep_size = 2048 # in logfile segments, 16MB each; 0 disables 
+<% else %>
 wal_keep_segments = 128 		# in logfile segments, 16MB each; 0 disables
+<% end %>
 #vacuum_defer_cleanup_age = 0	# number of xacts by which cleanup is delayed
 
 # - Standby Servers -
