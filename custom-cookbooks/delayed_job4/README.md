@@ -1,5 +1,5 @@
 # Delayed Job
 
-This example contains a complete cookbooks/ that you can use on the stable-v7 stack.
+This example contains a complete cookbooks directory that you can use on the stable-v7. 
 
-See https://github.com/engineyard/ey-cookbooks-stable-v7/tree/next-release/custom-cookbooks/delayed_job4/cookbooks/custom-delayed_job4 for complete instructions.
+See [cookbooks/custom-delayed_job4](cookbooks/custom-delayed_job4/README.md) for complete instructions.
