@@ -91,7 +91,7 @@ end
 
 # Only run the setup replication script if the enable_replication flag is set to true in the attributes
 if node["establish_replication"]
-  bash "setup-replication" do
+  execute "setup-replication" do
     code "/engineyard/bin/setup_replication.sh"
     timeout 7200  # default 2 hours, if you have a lot of data you may need to increase this
     action :nothing
