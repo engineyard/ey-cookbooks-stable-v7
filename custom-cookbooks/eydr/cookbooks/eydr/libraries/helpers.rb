@@ -7,10 +7,6 @@ module PostgreSQL
     def pg_eydr_streaming
       `psql -U postgres -c "select status from pg_stat_wal_receiver;" | grep streaming | awk '{print $NF}'`.strip == "streaming"
     end
-
-    def pg_in_recovery
-      `psql -U postgres -c "select pg_is_in_recovery();" | grep t | awk '{print $NF}'`.strip == "t"
-    end
   end
 end
 
