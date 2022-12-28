@@ -1,1 +1,3 @@
-name 'custom-datadog'
+name "custom-datadog"
+
+version "1.0"
