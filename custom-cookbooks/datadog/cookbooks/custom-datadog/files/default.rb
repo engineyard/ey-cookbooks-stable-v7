@@ -34,8 +34,8 @@ execute "give datadog access to log files" do
   command "/usr/bin/setfacl -m g:dd-agent:rx /var/log/auth.log"
   command "/usr/bin/setfacl -m g:dd-agent:rx /var/log/daemon.log"
   if has_db
-    command "/usr/bin/setfacl -m g:dd-agent:rx /db/mysql/5.7/log/mysqld.err"
-    command "/usr/bin/setfacl -m g:dd-agent:rx /db/mysql/5.7/log/slow_query.log"
+    command "/usr/bin/setfacl -m g:dd-agent:rx /db/mysql/#{node["mysql"]["short_version"]}/log/mysqld.err"
+    command "/usr/bin/setfacl -m g:dd-agent:rx /db/mysql/#{node["mysql"]["short_version"]}/log/slow_query.log"
   end
 end
 
@@ -116,6 +116,7 @@ template "dd-agent_ACLS" do
   backup 0
   variables({
     include_database: has_db,
+    mysql_short_version: node["mysql"]["short_version"],
   })
 end
 

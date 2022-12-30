@@ -1,8 +1,8 @@
 <% if @include_database %>
-/db/mysql/5.7/log/*.log {
+  /db/mysql/<%= @mysql_short_version %>/log/*.log {
   postrotate
-  /usr/bin/setfacl -m g:dd-agent:rx /db/mysql/5.7/log/mysqld.err
-  /usr/bin/setfacl -m g:dd-agent:rx /db/mysql/5.7/log/slow_query.log
+  /usr/bin/setfacl -m g:dd-agent:rx /db/mysql/<%= @mysql_short_version %>/log/mysqld.err
+  /usr/bin/setfacl -m g:dd-agent:rx /db/mysql/<%= @mysql_short_version %>/log/slow_query.log
   endscript
 }
 <% end %>
