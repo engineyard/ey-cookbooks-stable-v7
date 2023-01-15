@@ -113,7 +113,7 @@ action :action_mysql_slave do
   execute "remove slave-relay*" do
     cwd node["mysql"]["datadir"]
     command "rm -f #{node['mysql']['datadir']}/slave-relay*"
-    only_if { !Dir.glob("#{node['mysql']['datadir']}/slave-relay*").empty? && !volume_from_slave_snapshot }
+    only_if { !Dir.glob("#{node['mysql']['datadir']}/slave-relay*").empty? && !volume_from_slave_snapshot  && !mysql_slave_is_slavey? }
   end
 
   # the master writes it's uuid to <datadir>/auto.cnf, the slave needs that removed so it will gen it's own
