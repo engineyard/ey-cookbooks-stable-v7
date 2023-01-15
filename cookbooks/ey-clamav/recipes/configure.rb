@@ -27,8 +27,6 @@ def clamav_scan_cron(scanpath, autorm_infected = true, runhour = 5, runminute = 
       user "root"
     end
 
-    runhour_count += 1
-
     run_minute += 20
     if run_minute >= 60
       run_minute = 0
