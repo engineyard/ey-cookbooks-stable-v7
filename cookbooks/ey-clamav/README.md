@@ -15,4 +15,4 @@ default value for each of the roles would be `[]` , In order add paths to run un
 3. In order to configure times
 
 * EY_CLAMAV_RUNHOUR - Integer - The hour to configure the cron to run at every day
-* EY_CLAMAV_RUNMINUTE - Integet - The Minute to configure the cron to run at the mentioned hour every day
+* EY_CLAMAV_RUNMINUTE - Integer - The Minute to configure the cron to run at the mentioned hour every day
