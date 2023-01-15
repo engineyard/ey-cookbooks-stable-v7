@@ -8,12 +8,6 @@ directory $quarantine_directory do
   action "create"
 end
 
-cron "update clamav knowledgebase" do
-  time :daily
-  command "systemctl stop clamav-daemon && freshclam && systemctl start clamav-daemon"
-  user "root"
-end
-
 def clamav_scan_cron(scanpath, autorm_infected = true, runhour = 5, runminute = 0)
   runhour_count = 0
   run_hour = runhour
@@ -27,24 +21,22 @@ def clamav_scan_cron(scanpath, autorm_infected = true, runhour = 5, runminute = 
       command << " --move #{$quarantine_directory}"
     end
     cron cron_name do
-      minute runminute
-      hour runhour
+      minute run_minute % 60
+      hour run_hour % 24
       command command + " >> /var/log/clamav/clamav"
       user "root"
     end
 
     runhour_count += 1
-    if runhour_count >= 3
-      run_hour += 1
-    end
 
     run_minute += 20
     if run_minute >= 60
       run_minute = 0
+      run_hour += 1
     end
   }
 end
 
 unless clamav["scanpath_" + node["dna"]["instance_role"].split("_")[0]].empty?
-  clamav_scan_cron(clamav["scanpath_" + node["dna"]["instance_role"].split("_")[0]], autoremove_infected)
+  clamav_scan_cron(clamav["scanpath_" + node["dna"]["instance_role"].split("_")[0]], autoremove_infected, clamav_run_hour, clamav_run_minute)
 end
