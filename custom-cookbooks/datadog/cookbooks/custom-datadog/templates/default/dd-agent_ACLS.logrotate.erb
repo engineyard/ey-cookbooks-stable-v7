@@ -1,0 +1,8 @@
+<% if @include_database %>
+  /db/mysql/<%= @mysql_short_version %>/log/*.log {
+  postrotate
+  /usr/bin/setfacl -m g:dd-agent:rx /db/mysql/<%= @mysql_short_version %>/log/mysqld.err
+  /usr/bin/setfacl -m g:dd-agent:rx /db/mysql/<%= @mysql_short_version %>/log/slow_query.log
+  endscript
+}
+<% end %>

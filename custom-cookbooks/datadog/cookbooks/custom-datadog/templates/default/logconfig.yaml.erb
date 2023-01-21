@@ -1,0 +1,31 @@
+logs:
+<% unless @include_database %>
+<% @applications.each do |app_name, data| %>
+  - type: file
+    path: "/var/log/engineyard/apps/<%= app_name %>/<%= @env %>.log"
+    service: <%= @service %>
+    source: ruby
+    sourcecategory: sourcecode
+<% end %>
+<% end %>
+<% if @include_dj %>
+  <% @applications.each do |app_name, data| %>
+  - type: file
+    path: "/var/log/engineyard/apps/<%= app_name %>/dj.log"
+    service: <%= @service %>
+  <% end %>
+<% end %>
+<% if @include_database %>
+  - type: file
+    path: "/db/mysql/<%= @mysql_short_version %>/log/mysqld.err"
+    service: <%= @service %>
+    source: mysql
+  - type: file
+    path: "/db/mysql/<%= @mysql_short_version %>/log/slow_query.log"
+    service: <%= @service %>
+    source: mysql
+    log_processing_rules:
+    - type: multi_line
+      name: new_slow_query_log_entry
+      pattern: '# Time:'
+<% end %>
