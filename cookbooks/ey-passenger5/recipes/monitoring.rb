@@ -52,4 +52,8 @@ if ["app_master", "app", "solo"].include?(node["dna"]["instance_role"])
     end
   end
 
+  ey_cloud_report "passenger" do
+    message "configuring passenger_monitor and passenger_killer finished"
+  end
+
 end

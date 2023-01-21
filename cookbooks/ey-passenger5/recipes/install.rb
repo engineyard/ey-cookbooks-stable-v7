@@ -95,3 +95,7 @@ cookbook_file "/engineyard/bin/passenger_monitor" do
   mode "0655"
   backup 0
 end
+
+ey_cloud_report "passenger5" do
+  message "Processing Passenger 5 finished"
+end

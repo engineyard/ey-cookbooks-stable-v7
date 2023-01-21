@@ -18,7 +18,7 @@ directory "/var/log/engineyard/nginx" do
   mode "0755"
 end
 
-["/data/nginx/servers", "/data/nginx/common", "/data/nginx/modules-available", "/data/nginx/modules-enabled"].each do |dir|
+["/data/nginx/servers", "/data/nginx/common"].each do |dir|
   directory dir do
     owner node["owner_name"]
     group node["owner_name"]
@@ -63,4 +63,8 @@ logrotate "nginx" do
   restart_command <<-SH
 [ ! -f /var/run/nginx.pid ] || kill -USR1 `cat /var/run/nginx.pid`
   SH
+end
+
+ey_cloud_report "nginx" do
+  message "processing nginx finished"
 end

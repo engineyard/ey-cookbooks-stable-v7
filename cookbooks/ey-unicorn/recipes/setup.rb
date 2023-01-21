@@ -22,4 +22,8 @@ node.engineyard.apps.each do |app|
     mode "755"
     recursive true
   end
+
+  ey_cloud_report "ey-unicorn" do
+    message "processing unicorn finished"
+  end
 end
