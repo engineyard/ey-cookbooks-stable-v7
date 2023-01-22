@@ -11,6 +11,15 @@ when "postgres10", "aurora-postgresql10"
 when "postgres11", "aurora-postgresql11"
   default["postgresql"]["latest_version"] = "11.16"
   default["postgresql"]["short_version"] = "11"
+when "postgres12", "aurora-postgresql12"
+  default["postgresql"]["latest_version"] = "12.13"
+  default["postgresql"]["short_version"] = "12"
+when "postgres13", "aurora-postgresql13"
+  default["postgresql"]["latest_version"] = "13.9"
+  default["postgresql"]["short_version"] = "13"
+when "postgres14", "aurora-postgresql14"
+  default["postgresql"]["latest_version"] = "14.6"
+  default["postgresql"]["short_version"] = "14"
 end
 
 unless fetch_env_var(node, "EY_POSTGRES_VERSION").nil?
