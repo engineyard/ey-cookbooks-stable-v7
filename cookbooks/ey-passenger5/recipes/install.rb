@@ -7,7 +7,7 @@ recipe = self
 
 # Notify dashboard
 ey_cloud_report "passenger5" do
-  message "Processing Passenger 5"
+  message "Installing Passenger 5 started"
 end
 
 # Install gems required by Passenger standalone
@@ -94,4 +94,8 @@ cookbook_file "/engineyard/bin/passenger_monitor" do
   group node["owner_name"]
   mode "0655"
   backup 0
+end
+
+ey_cloud_report "passenger5" do
+  message "Installing Passenger 5 finished"
 end

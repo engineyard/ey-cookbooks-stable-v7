@@ -1,5 +1,5 @@
 ey_cloud_report "puma" do
-  message "processing puma"
+  message "processing puma started"
 end
 
 workers = [(1.0 * get_pool_size() / node["dna"]["applications"].size).round, 1].max
@@ -105,4 +105,8 @@ node.engineyard.apps.each_with_index do |app, index|
               username: ssh_username)
     notifies :run, "execute[reload-systemd]"
   end
+end
+
+ey_cloud_report "puma" do
+  message "processing puma finished"
 end

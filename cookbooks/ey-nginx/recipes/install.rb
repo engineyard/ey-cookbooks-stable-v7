@@ -1,5 +1,5 @@
 ey_cloud_report "nginx" do
-  message "processing nginx"
+  message "processing nginx started"
 end
 
 # Mask nginx on non-app instances
@@ -63,4 +63,8 @@ logrotate "nginx" do
   restart_command <<-SH
 [ ! -f /var/run/nginx.pid ] || kill -USR1 `cat /var/run/nginx.pid`
   SH
+end
+
+ey_cloud_report "nginx" do
+  message "processing nginx finished"
 end

@@ -1,5 +1,5 @@
 ey_cloud_report "ey-unicorn" do
-  message "processing unicorn"
+  message "processing unicorn started"
 end
 
 directory "/var/log/engineyard/unicorn" do
@@ -22,4 +22,8 @@ node.engineyard.apps.each do |app|
     mode "755"
     recursive true
   end
+end
+
+ey_cloud_report 'ey-unicorn' do
+    message 'processing unicorn finished'
 end
