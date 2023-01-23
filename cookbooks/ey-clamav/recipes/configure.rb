@@ -1,7 +1,7 @@
 clamav = node["clamav"]
 autoremove_infected = clamav["autoremove_infected"]
-clamav_run_hour = clamav["runhour"]
-clamav_run_minute = clamav["runminute"]
+clamav_run_hour = clamav["runhour"].to_i
+clamav_run_minute = clamav["runminute"].to_i
 $quarantine_directory = clamav["quarantine_directory"]
 
 directory $quarantine_directory do
