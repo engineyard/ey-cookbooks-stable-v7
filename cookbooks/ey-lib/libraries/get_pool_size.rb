@@ -224,6 +224,15 @@ class Engineyard
         "r5d.24xlarge"   => InstanceResource.new(96, 337, nil),
 
         # Memory optimized 6th Gen
+        "r6a.large"      => InstanceResource.new(2, 12, nil),
+        "r6a.xlarge"     => InstanceResource.new(4, 24, nil),
+        "r6a.2xlarge"    => InstanceResource.new(8, 48, nil),
+        "r6a.4xlarge"    => InstanceResource.new(16, 96, nil),
+        "r6a.12xlarge"   => InstanceResource.new(48, 224, nil),
+        "r6a.16xlarge"   => InstanceResource.new(64, 316, nil),
+        "r6a.24xlarge"   => InstanceResource.new(96, 444, nil),
+        "r6a.32xlarge"   => InstanceResource.new(128, 535, nil),
+        "r6a.48xlarge"   => InstanceResource.new(192, 768, nil),
         "r6i.large"      => InstanceResource.new(2, 12, nil),
         "r6i.xlarge"     => InstanceResource.new(4, 22, nil),
         "r6i.2xlarge"    => InstanceResource.new(8, 44, nil),
