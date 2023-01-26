@@ -144,8 +144,6 @@ class Engineyard
         "m6a.4xlarge"    => InstanceResource.new(16, 84, nil),
         "m6a.12xlarge"   => InstanceResource.new(48, 201, nil),
         "m6a.24xlarge"   => InstanceResource.new(96, 404, nil),
-        "m6a.32xlarge"   => InstanceResource.new(128, 404, nil),
-        "m6a.48xlarge"   => InstanceResource.new(192, 404, nil),
         "m6i.large"      => InstanceResource.new(2, 12, nil),
         "m6i.xlarge"     => InstanceResource.new(4, 19, nil),
         "m6i.2xlarge"    => InstanceResource.new(8, 44, nil),
