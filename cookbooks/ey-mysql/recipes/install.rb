@@ -95,3 +95,11 @@ packages.each do |package|
     only_if { node.engineyard.instance.arch_type == "amd64" }
   end
 end
+if node["mysql"]["short_version"] == "8.0"
+ bash "Set my.cnf alternatives for MySQL 8.0" do
+  code <<-EOS
+  update-alternatives --install /etc/mysql/my.cnf my.cnf /etc/mysql/percona-server.cnf 1000
+  update-alternatives --set my.cnf /etc/mysql/percona-server.cnf
+  EOS
+ end
+end
