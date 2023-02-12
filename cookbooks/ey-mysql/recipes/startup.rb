@@ -28,7 +28,7 @@ end
 
 if node["mysql"]["short_version"] == "8.0"
   service "mysql" do
-  action :restart
-  not_if { ::File.exist?('/db/mysql/8.0/data/mysql.ibd') }
- end
+    action :restart
+    not_if { ::File.exist?("/db/mysql/8.0/data/mysql.ibd") }
+  end
 end
