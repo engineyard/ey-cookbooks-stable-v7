@@ -1,3 +1,7 @@
+ey_cloud_report "mysql installation" do
+  message "installation of mysql packages and dependencies started"
+end
+
 apt_repository "mysql57" do
   uri "http://repo.percona.com/ps-57/apt"
   distribution "#{`lsb_release -cs`.strip}"
@@ -94,4 +98,8 @@ packages.each do |package|
     ignore_failure true
     only_if { node.engineyard.instance.arch_type == "amd64" }
   end
+end
+
+ey_cloud_report "mysql installation" do
+  message "installation of mysql packages and dependencies finished"
 end
