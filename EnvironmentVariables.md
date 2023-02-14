@@ -24,7 +24,9 @@ If you are missing a setting, please request it by [opening a GitHub issue](http
 | `EY_NODEJS_VERSION`                 | N/A           | Sets the exact version of NodeJS (e.g. "12.18.3")                                                                                                                                                           |
 | [Worker settings](#worker-settings) | N/A           | [See below](#worker-settings)                                                                                                                                                                               |
 | [LetsEncrypt settings]              | N/A           | [LetsEncrypt Documentation](./cookbooks/letsencrypt/README.md)                                                                                                                                              |
-| `EY_POSTGRES_VERSION`		      | N/A	      | Sets exect version of postgresql. (e.g. 14.5).                                                                                                                                              		    |
+| `EY_POSTGRES_VERSION`		      | N/A	      | Sets exect version of postgresql. (e.g. "14.5")                                                                                                                                              		    |
+
+
 ## Worker Settings
 
 | Environment Variable               | Default Value | Description                                                                       |
