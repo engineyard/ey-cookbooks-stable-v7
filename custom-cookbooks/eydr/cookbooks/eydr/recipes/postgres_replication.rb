@@ -49,8 +49,8 @@ else
 end
 
 bash "remove-trigger-file" do
-    code "rm /tmp/postgresql.trigger"
-      only_if { ::File.exist?("/tmp/postgresql.trigger") }
+  code "rm /tmp/postgresql.trigger"
+  only_if { ::File.exist?("/tmp/postgresql.trigger") }
 end
 
 # Ensure the wal directory exists
