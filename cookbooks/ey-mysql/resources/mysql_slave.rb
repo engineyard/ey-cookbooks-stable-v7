@@ -17,14 +17,14 @@ action :action_mysql_slave do
     command "echo"
   end
 
- def self.mysql_slave_is_slavey?
-   begin
-     foo = `mysql -e "show slave status"`
-     !foo.empty?
-   rescue
-     false
-   end
- end
+  def self.mysql_slave_is_slavey?
+    begin
+      foo = `mysql -e "show slave status"`
+      !foo.empty?
+    rescue
+      false
+    end
+  end
 
   ruby_block "clean up half-done install" do
     block do
@@ -113,7 +113,7 @@ action :action_mysql_slave do
   execute "remove slave-relay*" do
     cwd node["mysql"]["datadir"]
     command "rm -f #{node['mysql']['datadir']}/slave-relay*"
-    only_if { !Dir.glob("#{node['mysql']['datadir']}/slave-relay*").empty? && !volume_from_slave_snapshot  && !mysql_slave_is_slavey? }
+    only_if { !Dir.glob("#{node['mysql']['datadir']}/slave-relay*").empty? && !volume_from_slave_snapshot && !mysql_slave_is_slavey? }
   end
 
   # the master writes it's uuid to <datadir>/auto.cnf, the slave needs that removed so it will gen it's own
