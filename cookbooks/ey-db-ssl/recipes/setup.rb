@@ -9,6 +9,10 @@ owner = node[keyname]["owner"]
 dbroot = node[keyname]["dbroot"]
 ssldir = node[keyname]["ssldir"]
 
+ey_cloud_report "db ssl keys" do
+  message "processing ssl keys started"
+end
+
 managed_template "/engineyard/bin/local_key_copy.sh" do
   owner "root"
   group "root"
@@ -97,4 +101,8 @@ end
 execute "Copy db ssl keys for #{node['dna']['users'].first['username']} from EBS if available" do
   command "/engineyard/bin/local_key_copy.sh #{node['dna']['users'].first['username']}"
   only_if { ::File.exist?(::File.join(ssldir, "root.crt")) and ::File.exist?(::File.join(dbroot, "keygen", node["dna"]["users"].first["username"], "#{keyname}.key")) }
+end
+
+ey_cloud_report "db ssl keys" do
+  message "processing ssl keys finished"
 end

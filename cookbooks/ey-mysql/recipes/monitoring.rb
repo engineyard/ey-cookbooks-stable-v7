@@ -1,5 +1,5 @@
 ey_cloud_report "mysql monitoring" do
-  message "processing mysql monitoring"
+  message "processing mysql monitoring started"
 end
 
 template "/engineyard/bin/check_mysql.sh" do
@@ -11,4 +11,8 @@ template "/engineyard/bin/check_mysql.sh" do
   variables({
     dbpass: node.engineyard.environment["db_admin_password"],
   })
+end
+
+ey_cloud_report "mysql monitoring" do
+  message "processing mysql monitoring finished"
 end
