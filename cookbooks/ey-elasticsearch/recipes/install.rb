@@ -14,6 +14,12 @@ if ES["is_elasticsearch_instance"]
     mode "755"
   end
 
+  directory "/mnt/log/elasticsearch" do
+    owner "elasticsearch"
+    group "elasticsearch"
+    mode "755"
+  end
+
   directory "/data/elasticsearch-#{ES['version']}/data" do
     owner "elasticsearch"
     group "elasticsearch"
