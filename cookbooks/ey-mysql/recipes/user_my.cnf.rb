@@ -5,6 +5,9 @@
 # Copyright:: 2008, Engine Yard, Inc.
 #
 # All rights reserved - Do Not Redistribute
+ey_cloud_report "db user config" do
+  message "setting up user configuration started"
+end
 
 template "/root/.my.cnf" do
   owner "root"
@@ -34,4 +37,8 @@ template "/home/#{node['owner_name']}/.my.cnf" do
     is_rds: db_host_is_rds?,
   })
   source "user_my.cnf.erb"
+end
+
+ey_cloud_report "db user config" do
+  message "setting up user configuration finished"
 end

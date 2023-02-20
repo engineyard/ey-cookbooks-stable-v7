@@ -1,6 +1,10 @@
 include_recipe "ey-ebs::default"
 innodb_buff = calc_innodb_buffer_pool()
 
+ey_cloud_report "mysql config" do
+  message "mysql config and dir creation started"
+end
+
 if node.engineyard.instance.arch_type == "arm64"
   raise "Graviton instances are not supported for MySQL currently!"
 end
@@ -109,4 +113,8 @@ directory "/var/run/mysqld" do
   owner "mysql"
   group "mysql"
   mode "755"
+end
+
+ey_cloud_report "mysql config" do
+  message "mysql config and dir creation finished"
 end
