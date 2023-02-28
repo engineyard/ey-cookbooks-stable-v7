@@ -25,8 +25,8 @@ If you are missing a setting, please request it by [opening a GitHub issue](http
 | [Worker settings](#worker-settings) | N/A           | [See below](#worker-settings)                                                                                                                                                                               |
 | [LetsEncrypt settings]              | N/A           | [LetsEncrypt Documentation](./cookbooks/letsencrypt/README.md)                                                                                                                                              |
 | `EY_POSTGRES_VERSION`		      | N/A	      | Sets exect version of postgresql. (e.g. "14.5") Tested for postgres versions up to 14.X                                                                                                                                         		    |
-
-
+| `EY_TLS10_ENABLED`              | N/A           | Enables support for TLS 1.0                                                                                                                                              |
+| `EY_TLS11_ENABLED`              | N/A           | Enables support for TLS 1.1                                                                                                                                              |
 ## Worker Settings
 
 | Environment Variable               | Default Value | Description                                                                       |

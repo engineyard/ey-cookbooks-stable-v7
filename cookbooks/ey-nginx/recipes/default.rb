@@ -148,6 +148,9 @@ node.engineyard.apps.each_with_index do |app, _index|
       notifies node["nginx"]["action"], "service[nginx]", :delayed
     end
 
+#    ey_tls10_enabled = fetch_env_var(node, "EY_TLS10_ENABLED") || false
+#    ey_tls11_enabled = fetch_env_var(node, "EY_TLS11_ENABLED") || false
+
     template "/data/nginx/servers/#{app.name}/default.ssl_cipher" do
       owner node["owner_name"]
       group node["owner_name"]
@@ -156,7 +159,9 @@ node.engineyard.apps.each_with_index do |app, _index|
       backup 3
       variables(
         app_name: app.name,
-        dhparam_available: app.metadata("dh_key", nil)
+        dhparam_available: app.metadata("dh_key", nil),
+        ey_tls10_enabled: (fetch_env_var(node, "EY_TLS10_ENABLED") || false),
+        ey_tls11_enabled: (fetch_env_var(node, "EY_TLS11_ENABLED") || false) 
       )
       notifies node["nginx"]["action"], "service[nginx]", :delayed
     end
