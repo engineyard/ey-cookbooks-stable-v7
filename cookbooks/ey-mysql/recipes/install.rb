@@ -49,6 +49,7 @@ end
 end
 
 package "libmysqlclient-dev"
+package "percona-server-client"
 
 case node["mysql"]["short_version"]
 when "5.7"
