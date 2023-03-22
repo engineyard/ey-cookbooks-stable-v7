@@ -91,6 +91,7 @@ execute "set-deb-confs" do
 end
 
 # Loop the packages because chef doesn't understand, you install the dependency before even in the array...
+if node["dna"]["instance_role"][/^(db|solo)/]
 packages.each do |package|
   apt_package package do
     version "#{package_version}"
@@ -99,6 +100,7 @@ packages.each do |package|
     ignore_failure true
     only_if { node.engineyard.instance.arch_type == "amd64" }
   end
+end
 end
 
 ey_cloud_report "mysql installation" do
