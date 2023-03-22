@@ -49,6 +49,7 @@ end
 end
 
 package "libmysqlclient-dev"
+# installs mysql client to all instnaces. 
 package "percona-server-client"
 
 case node["mysql"]["short_version"]
