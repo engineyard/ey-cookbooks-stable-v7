@@ -50,10 +50,10 @@ end
 
 package "libmysqlclient-dev"
 # installs mysql client to all instnaces. 
-if node.engineyard.instance.arch_type == "amd64"
-    package "percona-server-client"
+if node.engineyard.instance.arch_type == "arm64"
+    package "mysql-client"
 else
-  package "mysql-client"
+  package "percona-server-client"
 end
 
 case node["mysql"]["short_version"]
