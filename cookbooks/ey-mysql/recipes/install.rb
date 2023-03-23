@@ -50,7 +50,11 @@ end
 
 package "libmysqlclient-dev"
 # installs mysql client to all instnaces. 
-package "percona-server-client"
+if node.engineyard.instance.arch_type == "amd64"
+    package "percona-server-client"
+else
+  package "mysql-client"
+end
 
 case node["mysql"]["short_version"]
 when "5.7"
