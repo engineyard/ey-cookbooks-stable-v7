@@ -2,7 +2,7 @@ lock_major_version = `[ -f "/db/.lock_db_version" ] && grep -E -o '^[0-9]+\.[0-9
 db_stack = lock_major_version == "" ? attribute["dna"]["engineyard"]["environment"]["db_stack_name"] : "mysql#{lock_major_version.gsub(/\./, '_').strip}"
 
 default["latest_version_57"] = "5.7.37"
-default["latest_version_80"] = "8.0.28"
+default["latest_version_80"] = "8.0.29"
 major_version = ""
 custom_version = fetch_env_var(node, "EY_MYSQL_VERSION", nil)
 
