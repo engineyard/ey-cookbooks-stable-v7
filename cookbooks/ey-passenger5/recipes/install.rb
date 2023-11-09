@@ -41,6 +41,8 @@ framework_env = node["dna"]["environment"]["framework_env"]
 base_port = node["passenger5"]["port"].to_i
 stepping = 200
 app_base_port = base_port
+# For GEM_PATH and others, the major version is needed. I.e: '3.0.0' instead of '3.0.2'
+ruby_major_version = node["ruby"]["version"].sub(/(\d\.\d).\d*/, '\1.0')
 
 node.engineyard.apps.each_with_index do |app, index|
   app_path      = "/data/#{app.name}"
@@ -59,7 +61,8 @@ node.engineyard.apps.each_with_index do |app, index|
       version: version,
       port: app_base_port,
       worker_count: recipe.get_pool_size,
-      rails_env: framework_env
+      rails_env: framework_env, 
+      ruby_version: ruby_major_version
     )
   end
 

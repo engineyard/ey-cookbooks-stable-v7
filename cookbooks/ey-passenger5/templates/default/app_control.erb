@@ -17,6 +17,9 @@ export HOME="/home/<%= @user %>"
 #source "/data/<%= @app_name %>/shared/config/env.custom"
 #source "/data/<%= @app_name %>/shared/config/env.cloud"
 
+# Setting the GEM_PATH so that Passenger uses the app's gems
+export GEM_PATH="/data/<%= @app_name %>/shared/bundled_gems/ruby/<%= @ruby_version %>/"
+
 cd /data/<%= @app_name %>/
 
 case "$1" in
