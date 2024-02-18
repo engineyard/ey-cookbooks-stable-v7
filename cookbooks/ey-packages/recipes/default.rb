@@ -17,7 +17,12 @@ end
 
 install = node["packages"]["install"]
 install.each do |package|
-  package = JSON.parse(package)
+  if package.is_a?(String)
+    package = JSON.parse(package)
+  elsif !package.is_a?(Hash)
+    raise "Unexpected type #{package.class} for packages[\"install\"] element"
+  end
+
   if package != {}
     Chef::Log.info "PACKAGES: Installing #{package['name']}-#{package['version']}"
     package package["name"] do
