@@ -1,4 +1,5 @@
-unattended_flag = fetch_env_var(node, "EY_ENABLE_UNATTENDED_UPGRADES") ? 1 : 0
+unattended_flag_string = fetch_env_var(node, "EY_ENABLE_UNATTENDED_UPGRADES", "false")
+unattended_flag = unattended_flag_string.downcase == "true" || unattended_flag_string == "1" ? 1 : 0
 
 template "/etc/apt/apt.conf.d/20auto-upgrades" do
   mode "0644"
