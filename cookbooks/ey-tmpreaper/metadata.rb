@@ -1,0 +1,5 @@
+name "ey-tmpreaper"
+description "Configuration & deployment of tempreaper on Engine Yard"
+maintainer "Engine Yard"
+maintainer_email "support@engineyard.com"
+version "1.0.0"

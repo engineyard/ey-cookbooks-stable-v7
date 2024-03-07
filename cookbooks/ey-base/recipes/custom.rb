@@ -25,3 +25,8 @@ end
 if fetch_env_var(node, "EY_CLAMAV_ENABLED") =~ /^TRUE$/i
   include_recipe "ey-clamav"
 end
+
+if fetch_env_var(node, "EY_TMPREAPER_ENABLED") =~ /^TRUE$/i
+  include_recipe "ey-tmpreaper"
+end
+
