@@ -10,6 +10,15 @@ execute "reload-monit" do
   action :nothing
 end
 
+execute "update-apt-sources" do
+  command <<-EOH
+    cp /etc/apt/sources.list /etc/apt/sources.list.bak &&
+    sed -i 's|http://.*.ec2.archive.ubuntu.com/ubuntu/|http://archive.ubuntu.com/ubuntu/|g' /etc/apt/sources.list &&
+    apt-get update
+  EOH
+  action :run
+end
+
 apt_update
 
 package "openssl"
