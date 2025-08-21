@@ -12,9 +12,9 @@ end
 
 execute "update-apt-sources" do
   command <<-EOH
-    cp /etc/apt/sources.list /etc/apt/sources.list.bak &&
-    sed -i 's|http://.*.ec2.archive.ubuntu.com/ubuntu/|http://archive.ubuntu.com/ubuntu/|g' /etc/apt/sources.list &&
-    apt-get update
+    sed -i.bak 's|http://.*.ec2.archive.ubuntu.com/ubuntu/|http://archive.ubuntu.com/ubuntu/|g' /etc/apt/sources.list &&
+    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - &&
+    sed -i.bak 's|http://apt.postgresql.org/pub/repos/apt|http://apt-archive.postgresql.org/pub/repos/apt|g' /etc/apt/sources.list.d/posgresql.list
   EOH
   action :run
 end
