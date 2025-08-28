@@ -1,9 +1,12 @@
-apt_repository "posgresql" do
-  uri "https://apt-archive.postgresql.org/pub/repos/apt"
-  distribution "#{`lsb_release -cs`.strip}-pgdg-archive"
-  components ["main"]
-  key "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
-end.run_action(:add)
+# Only add PostgreSQL repository when actually using PostgreSQL stack
+if node["dna"]["engineyard"]["environment"]["db_stack_name"] =~ /^postgres|^aurora-postgresql/
+  apt_repository "posgresql" do
+    uri "https://apt-archive.postgresql.org/pub/repos/apt"
+    distribution "#{`lsb_release -cs`.strip}-pgdg-archive"
+    components ["main"]
+    key "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+  end.run_action(:add)
+end
 
 apt_update
 
