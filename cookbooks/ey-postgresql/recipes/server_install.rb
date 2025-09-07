@@ -6,6 +6,13 @@ if node["dna"]["engineyard"]["environment"]["db_stack_name"] =~ /^postgres|^auro
     components ["main"]
     key "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
   end.run_action(:add)
+else
+  # Clean up legacy PGDG repository file on non-PostgreSQL stacks
+  # This addresses GHI-14034: existing instances that already have the file from earlier runs
+  file "/etc/apt/sources.list.d/posgresql.list" do
+    action :delete
+    only_if { ::File.exist?("/etc/apt/sources.list.d/posgresql.list") }
+  end
 end
 
 apt_update
