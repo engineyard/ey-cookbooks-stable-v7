@@ -10,6 +10,15 @@ execute "reload-monit" do
   action :nothing
 end
 
+# Clean up legacy PGDG repository file that causes apt-get update to fail
+# This addresses GHI-14034: existing instances that already have the broken file from earlier runs
+# The file will be re-created later by PostgreSQL recipes if actually needed
+# Must happen before apt-get update to prevent failures
+file "/etc/apt/sources.list.d/posgresql.list" do
+  action :delete
+  only_if { ::File.exist?("/etc/apt/sources.list.d/posgresql.list") }
+end
+
 execute "update-apt-sources" do
   command <<-EOH
     cp /etc/apt/sources.list /etc/apt/sources.list.bak &&
