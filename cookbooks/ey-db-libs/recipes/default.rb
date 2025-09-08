@@ -10,18 +10,6 @@ if node["dna"]["engineyard"]["environment"]["db_stack_name"] =~ /^postgres|^auro
   end
 
   package "postgresql-server-dev-#{postgres_version}"
-else
-  # Clean up legacy PGDG repository file on non-PostgreSQL stacks
-  # This addresses GHI-14034: existing instances that already have the file from earlier runs
-  file "/etc/apt/sources.list.d/posgresql.list" do
-    action :delete
-    only_if { ::File.exist?("/etc/apt/sources.list.d/posgresql.list") }
-  end
-  
-  ey_cloud_report "postgresql cleanup" do
-    message "Cleaned up legacy PGDG repository file on non-PostgreSQL stack"
-    only_if { ::File.exist?("/etc/apt/sources.list.d/posgresql.list") }
-  end
 end
 package "libmysqlclient-dev"
 package "libsqlite3-dev"
