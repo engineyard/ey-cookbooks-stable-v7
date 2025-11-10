@@ -71,6 +71,8 @@ end
 # AI-GEN END
 
 # Installs MySQL client to all instances - AI-GEN - chatgpt
+# Note: For db/solo instances, client is installed with version pinning in the packages loop below
+# This block only installs client on app instances (which don't install server packages)
 if node.engineyard.instance.arch_type == "arm64"
   # AI-GEN START - chatgpt
   package "mysql-client" do
@@ -83,10 +85,12 @@ else
   when "5.7"
     package "percona-server-client-5.7" do
       action :install
+      not_if { instance_role[/^(db|solo)/] } # Skip on db/solo - installed with version pinning in packages loop
     end
   when "8.0"
     package "percona-server-client" do
       action :install
+      not_if { instance_role[/^(db|solo)/] } # Skip on db/solo - installed with version pinning in packages loop
     end
   end
 # AI-GEN END
@@ -95,9 +99,9 @@ end
 # AI-GEN START - chatgpt
 packages = case short_version
            when "5.7"
-             ["percona-server-common-5.7", "libperconaserverclient20", "percona-server-server-5.7"]
+             ["percona-server-client-5.7", "percona-server-common-5.7", "libperconaserverclient20", "percona-server-server-5.7"]
            when "8.0"
-             ["percona-server-common", "libperconaserverclient21", "percona-server-server"]
+             ["percona-server-client", "percona-server-common", "libperconaserverclient21", "percona-server-server"]
            end
 # AI-GEN END
 
