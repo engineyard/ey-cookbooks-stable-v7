@@ -97,11 +97,12 @@ else
 end
 
 # AI-GEN START - chatgpt
+# Package order: common must come before client (client depends on common)
 packages = case short_version
            when "5.7"
-             ["percona-server-client-5.7", "percona-server-common-5.7", "libperconaserverclient20", "percona-server-server-5.7"]
+             ["percona-server-common-5.7", "percona-server-client-5.7", "libperconaserverclient20", "percona-server-server-5.7"]
            when "8.0"
-             ["percona-server-client", "percona-server-common", "libperconaserverclient21", "percona-server-server"]
+             ["percona-server-common", "percona-server-client", "libperconaserverclient21", "percona-server-server"]
            end
 # AI-GEN END
 
@@ -138,13 +139,27 @@ execute "set-deb-confs" do
   command %(echo "#{packages.last} #{packages.last}/root-pass password #{node.engineyard.environment['db_admin_password']}" | debconf-set-selections && echo "#{packages.last} #{packages.last}/re-root-pass password #{node.engineyard.environment['db_admin_password']}" | debconf-set-selections) # AI-GEN - chatgpt
 end
 
+# Remove packages if installed with wrong version (from previous failed runs)
+# This ensures clean installation with correct versions
+if instance_role[/^(db|solo)/] && node.engineyard.instance.arch_type == "amd64"
+  packages.each do |package|
+    execute "remove-#{package}-if-wrong-version" do
+      command "apt-get remove -y #{package} || true"
+      only_if do
+        installed_version = `dpkg -l 2>/dev/null | grep '^ii.*#{package}' | awk '{print $3}' 2>/dev/null`.strip
+        installed_version != "" && installed_version != package_version
+      end
+    end
+  end
+end
+
 # Loop through the packages because chef doesn't understand you install the dependency before even in the array... AI-GEN - chatgpt
 if instance_role[/^(db|solo)/] # AI-GEN - chatgpt
   packages.each do |package|
     apt_package package do
       version package_version # AI-GEN - chatgpt
       action :install
-      options "--yes --fix-missing" # AI-GEN - chatgpt
+      options "--yes --fix-missing --allow-downgrades" # AI-GEN - chatgpt - allow-downgrades needed if packages already installed
       ignore_failure true
       only_if { node.engineyard.instance.arch_type == "amd64" }
     end
