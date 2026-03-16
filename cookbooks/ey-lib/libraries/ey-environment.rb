@@ -124,6 +124,8 @@ class Chef
           ruby_300: "3.0.2",
           ruby_310: "3.1.1",
           ruby_320: "3.2.0",
+          ruby_330: "3.3.10",
+          ruby_340: "3.4.9",
         }
         if versions.key?(ruby_archtype.to_sym)
           version = versions[ruby_archtype.to_sym]
