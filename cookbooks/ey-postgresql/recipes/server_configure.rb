@@ -319,12 +319,12 @@ end
 
 ruby_block "process extensions.json" do
   block do
-    # run_context = Chef::RunContext.new(node, {})
     exts = JSON.parse(::File.read(node["pg_extensions_file"]))
-    exts.each do |db_name, exts|
-      run_context.resource_collection << r = Chef::Resource::PostgresqlPgExtension.new("install #{exts.join(',')} in database #{db_name}", run_context)
-      r.db_name = db_name
-      r.ext_name = exts
+    exts.each do |db, ext_list|
+      declare_resource(:ey_postgresql_pg_extension, "install #{ext_list.join(',')} in database #{db}") do
+        db_name db
+        ext_name ext_list
+      end
     end
   end
   only_if { ::File.exist?(node["pg_extensions_file"]) }

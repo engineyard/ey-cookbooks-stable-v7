@@ -40,7 +40,7 @@ action :install do
             quoted_ext_name = %(\\"#{ext_name}\\")
           end
           execute "Postgresql loading #{do_load ? 'library' : 'extension'} #{ext_name}" do
-            command %(psql -U postgres -d #{db_name} -c "#{cmd} #{quoted_ext_name} #{"SCHEMA #{new_resource.schema_name}" unless new_resource.schema_name.nil?} #{"VERSION #{new_resource.version}" unless new_resource.version.nil?} #{"FROM #{new_resource.old_version}" unless new_resource.old_version.nil?};")
+            command %(psql -U postgres -d #{db_name} -c "#{cmd} #{quoted_ext_name} #{"SCHEMA #{new_resource.schema_name}" unless new_resource.schema_name.nil?} #{"VERSION '#{new_resource.version}'" unless new_resource.version.nil?} #{"FROM '#{new_resource.old_version}'" unless new_resource.old_version.nil?};")
           end
 
           # and a couple follow up commands for Postgis
