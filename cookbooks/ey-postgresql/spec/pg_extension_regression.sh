@@ -2,14 +2,25 @@
 # Regression guard for GHI-21914 — pg_extension NameError under Chef 17.
 #
 # Converges the ey-postgresql `pg_extension` custom resource with Chef Infra
-# Client (Chef 17-compatible) using the customer's exact invocation (single
-# string values) plus the array form, and FAILS if the run raises `NameError`
-# for a resource property — the original bug, where `action :install` read its
+# Client (Chef 17-compatible) and FAILS if the run raises `NameError` for a
+# resource property — the original bug, where `action :install` read its
 # properties as bare locals instead of `new_resource.*`.
 #
-# A running PostgreSQL is NOT required: the converge legitimately stops at the
+# The single-string and Array-typed invocations are converged as SEPARATE runs.
+# This matters without a database: the first resource's psql step fails (no DB)
+# and aborts the converge, so a single recipe with both resources would never
+# reach the second. Running them independently guarantees the property-access
+# path of BOTH the String and Array forms is actually exercised. Each run also
+# asserts its resource's action was reached, so a converge that dies early is a
+# harness error (exit 2), never a silent pass.
+#
+# A running PostgreSQL is NOT required: each converge legitimately stops at the
 # psql step with a connection error, which this guard ignores. Only a NameError
 # (or failing to reach the resource) fails the guard.
+#
+# For full database-state coverage (extension actually created, VERSION quoting,
+# the server_configure.rb dynamic path) run pg_extension_integration_test.rb
+# against a live PostgreSQL. This script is the fast, dependency-light gate.
 #
 # Requires chef-solo on PATH:  gem install chef chef-bin
 # Exit 0 = pass, 1 = regression, 2 = harness/setup error.
@@ -52,19 +63,8 @@ name "custom"
 version "0.0.0"
 depends "ey-postgresql"
 RB
-cat > "$CB/custom/recipes/default.rb" <<'RB'
-ey_postgresql_pg_extension 'Get PostGIS' do
-  ext_name 'postgis'
-  db_name  'svcy'
-end
 
-ey_postgresql_pg_extension 'multi' do
-  ext_name ['postgis', 'hstore']
-  db_name  ['svcy', 'other']
-end
-RB
-
-cat > "$WORK/solo.rb"  <<RB
+cat > "$WORK/solo.rb" <<RB
 cookbook_path "$CB"
 RB
 cat > "$WORK/node.json" <<'RB'
@@ -78,20 +78,42 @@ cat > "$WORK/node.json" <<'RB'
 }
 RB
 
-OUT="$WORK/run.log"
-chef-solo -c "$WORK/solo.rb" -j "$WORK/node.json" --chef-license accept >"$OUT" 2>&1
+# Converge one recipe body and check its resource reached `action install`
+# without a NameError. Args: <label> <resource-name-in-log> <recipe-body>
+run_case() {
+  local label="$1" res_name="$2" recipe="$3"
+  printf '%s\n' "$recipe" > "$CB/custom/recipes/default.rb"
+  local out="$WORK/${label}.log"
+  chef-solo -c "$WORK/solo.rb" -j "$WORK/node.json" --chef-license accept >"$out" 2>&1
 
-if ! grep -q "pg_extension\[Get PostGIS\] action install" "$OUT"; then
-  echo "ERROR: pg_extension resource never converged — harness problem:" >&2
-  tail -20 "$OUT" >&2
-  exit 2
+  if ! grep -q "pg_extension\[${res_name}\] action install" "$out"; then
+    echo "ERROR [$label]: pg_extension resource never converged — harness problem:" >&2
+    tail -20 "$out" >&2
+    return 2
+  fi
+  if grep -q "NameError" "$out"; then
+    echo "FAIL [$label]: pg_extension raised NameError (GHI-21914 regression):" >&2
+    grep -m1 "undefined local variable or method" "$out" | sed 's/ for #.*//' >&2
+    return 1
+  fi
+  echo "  ok [$label]: reached action install with no NameError"
+  return 0
+}
+
+rc=0
+run_case "single" "Get PostGIS" \
+"ey_postgresql_pg_extension 'Get PostGIS' do
+  ext_name 'postgis'
+  db_name  'svcy'
+end" || rc=$?
+
+run_case "array" "multi" \
+"ey_postgresql_pg_extension 'multi' do
+  ext_name ['postgis', 'hstore']
+  db_name  ['svcy', 'other']
+end" || rc=$?
+
+if [ "$rc" -eq 0 ]; then
+  echo "PASS: pg_extension property reads are new_resource-qualified (String + Array forms)"
 fi
-
-if grep -q "NameError" "$OUT"; then
-  echo "FAIL: pg_extension raised NameError (GHI-21914 regression):" >&2
-  grep -m1 "undefined local variable or method" "$OUT" | sed 's/ for #.*//' >&2
-  exit 1
-fi
-
-echo "PASS: pg_extension converged with no NameError (property reads are new_resource-qualified)"
-exit 0
+exit "$rc"

@@ -1,0 +1,81 @@
+name: ey-postgresql tests
+
+# Runs the ey-postgresql regression suite as a PR check. Covers GHI-21914:
+# the pg_extension custom resource must read its properties via new_resource.*
+# under Chef 17, quote VERSION/FROM in CREATE EXTENSION, and the
+# server_configure "process extensions.json" block must resolve the resource
+# via declare_resource (not the stale Chef::Resource::PostgresqlPgExtension).
+
+on:
+  pull_request:
+    paths:
+      - "cookbooks/ey-postgresql/**"
+      - ".github/workflows/ey-postgresql-tests.yml"
+  push:
+    branches: [next-release]
+    paths:
+      - "cookbooks/ey-postgresql/**"
+      - ".github/workflows/ey-postgresql-tests.yml"
+
+jobs:
+  pg-extension:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      # The pg_extension resource runs `psql -U postgres` with no host/port, so
+      # it (and the test harness) picks up the connection from these env vars.
+      PGHOST: localhost
+      PGPORT: "5432"
+      PGUSER: postgres
+      PGPASSWORD: postgres
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install PostgreSQL client (psql)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.1"
+
+      - name: Install Chef (17.x)
+        working-directory: cookbooks/ey-postgresql/spec
+        run: |
+          gem install bundler
+          bundle install --jobs 4
+          # expose chef-solo on PATH for the guard script and the harness
+          echo "$(bundle exec ruby -e 'print Gem.bindir')" >> "$GITHUB_PATH"
+
+      - name: Wait for PostgreSQL
+        run: |
+          for i in $(seq 1 30); do
+            pg_isready -h localhost -p 5432 -U postgres && break
+            sleep 2
+          done
+          psql -c "SELECT version();"
+
+      - name: Integration tests (live PostgreSQL)
+        working-directory: cookbooks/ey-postgresql/spec
+        run: bundle exec ruby pg_extension_integration_test.rb
+
+      - name: No-DB regression guard
+        # chef-solo is already on PATH (Gem.bindir added in the install step).
+        run: ./cookbooks/ey-postgresql/spec/pg_extension_regression.sh

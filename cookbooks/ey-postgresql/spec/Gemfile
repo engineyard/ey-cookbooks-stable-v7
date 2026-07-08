@@ -1,0 +1,7 @@
+# Test-only dependencies for the ey-postgresql regression suite.
+# Pins Chef to the version deployed on the Stack v7 (Chef 17) so the tests
+# exercise the same custom-resource property/DSL behavior as production.
+source "https://rubygems.org"
+
+gem "chef", "17.9.46"
+gem "chef-bin", "17.9.46"
