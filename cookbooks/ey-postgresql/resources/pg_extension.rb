@@ -10,8 +10,8 @@ property :old_version, String
 property :use_load, [true, false], default: false # use LOAD instead of CREATE EXTENSION
 
 action :install do
-  ext_names = ext_name.is_a?(String) ? [ext_name] : ext_name
-  db_names = db_name.is_a?(String) ? [db_name] : db_name
+  ext_names = new_resource.ext_name.is_a?(String) ? [new_resource.ext_name] : new_resource.ext_name
+  db_names = new_resource.db_name.is_a?(String) ? [new_resource.db_name] : new_resource.db_name
   postgres_version = node["postgresql"]["short_version"]
 
   if node["dna"]["instance_role"][/^(db|solo)/]
@@ -31,7 +31,7 @@ action :install do
         # the main extension/library install bit
         if node["dna"]["instance_role"][/db_master|solo/]
           Chef::Log.info "Installing PostgreSQL extension #{ext_name} to database #{db_name}."
-          do_load = ext_details[:use_load].nil? ? (use_load || false) : (ext_details[:use_load] || use_load)
+          do_load = ext_details[:use_load].nil? ? (new_resource.use_load || false) : (ext_details[:use_load] || new_resource.use_load)
           if do_load
             cmd = "LOAD"
             quoted_ext_name = "'#{ext_name}'"
@@ -40,7 +40,7 @@ action :install do
             quoted_ext_name = %(\\"#{ext_name}\\")
           end
           execute "Postgresql loading #{do_load ? 'library' : 'extension'} #{ext_name}" do
-            command %(psql -U postgres -d #{db_name} -c "#{cmd} #{quoted_ext_name} #{"SCHEMA #{schema_name}" unless schema_name.nil?} #{"VERSION #{version}" unless version.nil?} #{"FROM #{old_version}" unless old_version.nil?};")
+            command %(psql -U postgres -d #{db_name} -c "#{cmd} #{quoted_ext_name} #{"SCHEMA #{new_resource.schema_name}" unless new_resource.schema_name.nil?} #{"VERSION #{new_resource.version}" unless new_resource.version.nil?} #{"FROM #{new_resource.old_version}" unless new_resource.old_version.nil?};")
           end
 
           # and a couple follow up commands for Postgis
