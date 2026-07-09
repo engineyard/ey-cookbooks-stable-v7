@@ -36,6 +36,7 @@ module PgExtHarness
   SPEC_DIR = __dir__
   EYPG_DIR = File.expand_path("..", SPEC_DIR)                       # cookbooks/ey-postgresql
   RESOURCE = File.join(EYPG_DIR, "resources", "pg_extension.rb")
+  CREATEDB = File.join(EYPG_DIR, "resources", "createdb.rb")
   SERVER_CONFIGURE = File.join(EYPG_DIR, "recipes", "server_configure.rb")
 
   module_function
@@ -66,6 +67,7 @@ module PgExtHarness
       ])
 
       FileUtils.cp(RESOURCE, File.join(cb, "ey-postgresql", "resources", "pg_extension.rb"))
+      FileUtils.cp(CREATEDB, File.join(cb, "ey-postgresql", "resources", "createdb.rb"))
       File.write(File.join(cb, "ey-postgresql", "metadata.rb"), %(name "ey-postgresql"\nversion "0.0.0"\n))
       %w[postgis_build auto_explain pg_stat_statements].each do |r|
         File.write(File.join(cb, "ey-postgresql", "recipes", "#{r}.rb"), "# stub for integration test\n")
@@ -182,6 +184,29 @@ class PgExtensionIntegrationTest < Minitest::Test
                  "hstore should be pinned to #{version}"
     assert_equal "ext", H.psql("SELECT n.nspname FROM pg_extension e JOIN pg_namespace n ON n.oid=e.extnamespace WHERE extname='hstore'", db: "svcy"),
                  "hstore should be created in schema ext"
+  end
+
+  # Fix 4: the sibling `createdb` resource had the same bare-property bug
+  # (db_name/owner read as bare identifiers; note db_name was not even a declared
+  # property — the DB name property is `name`). A customer-cookbook-style
+  # invocation must create the database, no NameError.
+  def test_createdb_creates_database
+    H.psql("DROP DATABASE IF EXISTS createdb_spec WITH (FORCE)", db: "postgres")
+    H.psql("DROP ROLE IF EXISTS deploy", db: "postgres")
+    H.psql("CREATE ROLE deploy LOGIN", db: "postgres")
+    out = H.converge(<<~RB, H::BASE_NODE)
+      createdb 'make app db' do
+        name  'createdb_spec'
+        owner 'deploy'
+      end
+    RB
+    refute_name_error(out)
+    assert_equal "1",
+                 H.psql("SELECT 1 FROM pg_database WHERE datname='createdb_spec'", db: "postgres"),
+                 "createdb should create the database createdb_spec"
+    assert_equal "deploy",
+                 H.psql("SELECT pg_catalog.pg_get_userbyid(datdba) FROM pg_database WHERE datname='createdb_spec'", db: "postgres"),
+                 "createdb should set the owner to deploy"
   end
 
   # Fix 3: the real "process extensions.json" block must resolve the resource

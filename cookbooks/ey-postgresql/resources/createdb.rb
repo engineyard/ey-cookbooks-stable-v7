@@ -8,9 +8,9 @@ default_action :createdb_action
 
 action :createdb_action do
   if ["solo", "db_master"].include?(node["dna"]["instance_role"])
-    execute "create database for #{db_name}" do
-      command %(psql -U postgres postgres -c \"CREATE DATABASE #{db_name} OWNER #{owner}\")
-      not_if %(psql -U postgres -t -c "select datname from pg_database where datname = '#{db_name}';" | grep #{db_name})
+    execute "create database for #{new_resource.name}" do
+      command %(psql -U postgres postgres -c \"CREATE DATABASE #{new_resource.name} OWNER #{new_resource.owner}\")
+      not_if %(psql -U postgres -t -c "select datname from pg_database where datname = '#{new_resource.name}';" | grep #{new_resource.name})
     end
   end
 end
